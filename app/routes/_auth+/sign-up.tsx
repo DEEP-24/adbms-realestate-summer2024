@@ -1,4 +1,5 @@
 import {
+  Button,
   Group,
   PasswordInput,
   Select,
@@ -9,7 +10,6 @@ import {
 import type { ActionFunction } from "@remix-run/node";
 import { Link, useFetcher, useSearchParams } from "@remix-run/react";
 import appConfig from "app.config";
-import { Button } from "~/components/ui/button";
 import { createUserSession } from "~/lib/session.server";
 import { createUser, getUserByEmail } from "~/lib/user.server";
 import { RegisterUserSchema } from "~/lib/zod.schema";
@@ -17,6 +17,7 @@ import { UserRole } from "~/roles";
 import { badRequest } from "~/utils/misc.server";
 import type { inferErrors } from "~/utils/validation";
 import { validateAction } from "~/utils/validation";
+import { DatePickerInput } from "@mantine/dates";
 
 interface ActionData {
   fieldErrors?: inferErrors<typeof RegisterUserSchema>;
@@ -32,7 +33,18 @@ export const action: ActionFunction = async ({ request }) => {
     return badRequest<ActionData>({ fieldErrors });
   }
 
-  const { email, password, firstName, lastName, phoneNo, address, role, dob, city, zipcode } = fields;
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    phoneNo,
+    address,
+    role,
+    dob,
+    city,
+    zipcode,
+  } = fields;
 
   const existingUser = await getUserByEmail(email);
   if (existingUser) {
@@ -85,37 +97,33 @@ export default function SignUp() {
         <h3>{appConfig.name}</h3>
       </div>
       <div className="w-full p-5">
-        <fetcher.Form method="post" replace={true} className="mt-8">
+        <fetcher.Form method="post" className="mt-8">
           <input type="hidden" name="redirectTo" value={redirectTo} />
 
           <fieldset disabled={isSubmitting} className="flex flex-col gap-4">
-              <div className="flex items-center justify-between inset-0 gap-2 w-full">
-                <Select
-                  data={Object.values(UserRole)
-                    .filter((role) => role !== UserRole.ADMIN)
-                    .map((role) => ({
-                      value: role,
-                      label: role,
-                    }))}
-                  name="role"
-                  label="Role"
-                  error={actionData?.fieldErrors?.role}
-                  required={true}
-                  className="w-full"
-                />
-               <div className="flex flex-col items-center justify-center">
-                <label htmlFor="dob" className="block text-sm font-medium text-gray-700">
-                  Date of Birth
-                </label>
-                <input
-                  type="date"
-                  id="dob"
-                  name="dob"
-                  className="mt-1 block w-full shadow-sm sm:text-sm border-gray-500 border-2 rounded-lg p-1"
-                  required={true}
-                />
-               </div>
-              </div>
+            <div className="flex items-center justify-between inset-0 gap-2 w-full">
+              <Select
+                data={Object.values(UserRole)
+                  .filter((role) => role !== UserRole.ADMIN)
+                  .map((role) => ({
+                    value: role,
+                    label: role,
+                  }))}
+                name="role"
+                label="Role"
+                error={actionData?.fieldErrors?.role}
+                required={true}
+                className="w-full"
+              />
+              <DatePickerInput
+                name="dob"
+                label="Date of Birth"
+                required={true}
+                maxDate={new Date()}
+                error={actionData?.fieldErrors?.dob}
+                className="w-full"
+              />
+            </div>
 
             <div className="flex justify-between inset-0 gap-2 w-full">
               <TextInput
@@ -134,7 +142,7 @@ export default function SignUp() {
                 error={actionData?.fieldErrors?.lastName}
                 required={true}
                 className="w-full"
-              />           
+              />
             </div>
 
             <TextInput
@@ -194,11 +202,11 @@ export default function SignUp() {
                 error={actionData?.fieldErrors?.zipcode}
                 required={true}
                 className="w-full"
-              />           
+              />
             </div>
 
             <div className="flex justify-between items-center mt-2">
-              <Group position="apart">
+              <Group>
                 <Switch
                   id="remember-me"
                   name="rememberMe"

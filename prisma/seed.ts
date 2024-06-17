@@ -49,7 +49,7 @@ async function main() {
       address: "123 Property Manager Street",
       dob: new Date("1990-01-01"),
       city: "Property Manager City",
-      zipcode: "12345"
+      zipcode: "12345",
     },
   });
 

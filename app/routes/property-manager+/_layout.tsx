@@ -1,13 +1,13 @@
-import type { LoaderArgs, SerializeFrom } from "@remix-run/node";
+import type { LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Outlet, type ShouldReloadFunction } from "@remix-run/react";
+import { Outlet } from "@remix-run/react";
 import Navbar from "~/components/Navbar";
 import { isAdmin, isCustomer, requireUserId } from "~/lib/session.server";
-import type { NavbarLink } from "~/routes/admin";
+import type { NavbarLink } from "~/routes/admin+/_layout";
 import { useOptionalPropertyManager } from "~/utils/hooks";
 
 export type AppLoaderData = SerializeFrom<typeof loader>;
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireUserId(request);
 
   if (await isAdmin(request)) {
@@ -46,7 +46,7 @@ export default function AppLayout() {
     <div className="h-full">
       <div className="flex flex-col h-full">
         <Navbar
-          userName={user!.firstName + " " + user!.lastName}
+          userName={`${user!.firstName} ${user!.lastName}`}
           navLinks={NavLinks}
           userEmail={user!.email}
         />
@@ -57,15 +57,3 @@ export default function AppLayout() {
     </div>
   );
 }
-
-export const unstable_shouldReload: ShouldReloadFunction = ({
-  submission,
-  prevUrl,
-  url,
-}) => {
-  if (!submission && prevUrl.pathname === url.pathname) {
-    return false;
-  }
-
-  return true;
-};

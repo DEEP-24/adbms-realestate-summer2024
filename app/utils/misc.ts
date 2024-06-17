@@ -3,17 +3,17 @@ export function round(number: number, precision: number) {
   return Math.round((number + Number.EPSILON) * d) / d;
 }
 
-export function titleCase(string: string) {
-  string = string.toLowerCase();
-  const wordsArray = string.split(" ");
+// export function titleCase(string: string) {
+// 	string = string.toLowerCase();
+// 	const wordsArray = string.split(" ");
 
-  for (let i = 0; i < wordsArray.length; i++) {
-    wordsArray[i] =
-      wordsArray[i].charAt(0).toUpperCase() + wordsArray[i].slice(1);
-  }
+// 	for (let i = 0; i < wordsArray.length; i++) {
+// 		wordsArray[i] =
+// 			wordsArray[i].charAt(0).toUpperCase() + wordsArray[i].slice(1);
+// 	}
 
-  return wordsArray.join(" ");
-}
+// 	return wordsArray.join(" ");
+// }
 
 export function formatList(list: Array<string>) {
   return new Intl.ListFormat("en").format(list);

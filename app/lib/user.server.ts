@@ -1,5 +1,5 @@
 import type { Admin, PropertyManager, User } from "@prisma/client";
-import * as bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 import { db } from "~/lib/prisma.server";
 import { getUserId, logout } from "~/lib/session.server";
 import { UserRole } from "~/roles";
@@ -81,7 +81,7 @@ export async function createUser({
         address,
         dob,
         city,
-        zipcode
+        zipcode,
       },
     });
   }

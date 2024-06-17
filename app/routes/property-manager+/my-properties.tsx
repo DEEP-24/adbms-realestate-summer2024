@@ -1,10 +1,10 @@
-import { type LoaderArgs, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import PropertyCard from "~/components/property-card";
 import { getPropertiesByUserId } from "~/lib/properties.server";
 import { requireUserId } from "~/lib/session.server";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await requireUserId(request);
   const properties = await getPropertiesByUserId(userId);
   return json({

@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import * as bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 import { getUserId } from "~/lib/session.server";
 import { getUserById } from "~/lib/user.server";
 

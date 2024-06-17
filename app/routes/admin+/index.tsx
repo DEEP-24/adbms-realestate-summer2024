@@ -1,11 +1,11 @@
-import { type LoaderArgs, redirect, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import {
   isCustomer,
   isPropertyManager,
   requireUserId,
 } from "~/lib/session.server";
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireUserId(request);
 
   if (await isCustomer(request)) {

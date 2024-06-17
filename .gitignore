@@ -1,15 +1,9 @@
-/node_modules/
+node_modules
 
-.cache
-.vercel
-.output
-
-/build/
+/.cache
+/build
 /public/build
-/api/index.js
-/api/index.js.map
-/app/styles/app.css
-
-./server/dist
-
-.DS_Store
+.env
+/coverage
+/playwright-report
+/test-results

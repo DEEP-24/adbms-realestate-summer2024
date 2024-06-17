@@ -1,8 +1,14 @@
-import { Group, PasswordInput, Select, Switch, TextInput } from "@mantine/core";
+import {
+  Button,
+  Group,
+  PasswordInput,
+  Select,
+  Switch,
+  TextInput,
+} from "@mantine/core";
 import type { ActionFunction } from "@remix-run/node";
 import { Link, useFetcher, useSearchParams } from "@remix-run/react";
 import appConfig from "app.config";
-import { Button } from "~/components/ui/button";
 import { createUserSession } from "~/lib/session.server";
 import { verifyLogin } from "~/lib/user.server";
 import { LoginSchema } from "~/lib/zod.schema";
@@ -61,10 +67,10 @@ export default function Login() {
       </div>
       <div className="flex items-center justify-center gap-2">
         <img src="/logo.png" alt="Logo" className="w-16 h-16 mx-auto" />
-        <h3>{appConfig.name}</h3>
+        <h3 className="text-black">{appConfig.name}</h3>
       </div>
       <div className="w-full p-5">
-        <fetcher.Form method="post" replace={true} className="mt-8">
+        <fetcher.Form method="post" className="mt-8">
           <input type="hidden" name="redirectTo" value={redirectTo} />
           <fieldset disabled={isSubmitting} className="flex flex-col gap-4">
             <Select
@@ -76,6 +82,7 @@ export default function Login() {
               label="Role"
               error={actionData?.fieldErrors?.role}
               required={true}
+              className="text-black"
             />
             <TextInput
               name="email"

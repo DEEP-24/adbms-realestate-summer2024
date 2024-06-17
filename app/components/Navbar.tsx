@@ -1,7 +1,7 @@
 import { Form, NavLink } from "@remix-run/react";
 import Container from "~/components/container";
 import Logo from "~/components/logo";
-import type { NavbarLink } from "~/routes/admin";
+import type { NavbarLink } from "~/routes/admin+/_layout";
 
 interface NavbarProps {
   userName: string;

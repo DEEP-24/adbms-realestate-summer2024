@@ -23,7 +23,7 @@ export const RegisterUserSchema = z
     phoneNo: z.string().min(10, "Phone number is required"),
     address: z.string().min(1, "Address is required"),
     role: z.enum(["USER", "PROPERTY_MANAGER"]),
-    dob: z.string().trim().min(10, 'Date of birth is required'),
+    dob: z.string().trim().min(10, "Date of birth is required"),
     city: z.string().min(1, "City is required"),
     zipcode: z.string().min(5, "Zipcode is required"),
     redirectTo: z.string().default("/"),

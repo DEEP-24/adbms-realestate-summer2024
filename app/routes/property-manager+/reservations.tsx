@@ -1,10 +1,10 @@
-import { type LoaderArgs, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { getAllReservationsForPropertyManager } from "~/lib/reservation.server";
 import { requireUserId } from "~/lib/session.server";
 import { formatDateTime } from "~/utils/misc";
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
 
   const reservations = await getAllReservationsForPropertyManager(userId);

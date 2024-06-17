@@ -16,7 +16,7 @@ export function useMatchesData(
     () => matchingRoutes.find((route) => route.id === routeId),
     [matchingRoutes, routeId],
   );
-  return route?.data;
+  return route?.data as Record<string, unknown>;
 }
 
 export function useOptionalAdmin() {

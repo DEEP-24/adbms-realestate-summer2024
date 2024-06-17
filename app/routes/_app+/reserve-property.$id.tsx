@@ -1,15 +1,15 @@
 import {
-  type DataFunctionArgs,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
   json,
   redirect,
-  type LoaderArgs,
 } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { db } from "~/lib/prisma.server";
 import { getPropertyById } from "~/lib/properties.server";
 import { getUserId } from "~/lib/session.server";
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { id } = params;
 
   if (!id) {
@@ -23,7 +23,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   });
 };
 
-export const action = async ({ request, params }: DataFunctionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
   const userId = await getUserId(request);

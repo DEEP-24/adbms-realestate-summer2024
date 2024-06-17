@@ -1,9 +1,8 @@
-import { ModalsProvider } from "@mantine/modals";
-import { StylesPlaceholder } from "@mantine/remix";
-import { NotificationsProvider } from "@mantine/notifications";
+import { MantineProvider } from "@mantine/core";
+import { ModalsProvider as MantineModalsProvider } from "@mantine/modals";
 import type {
   LinksFunction,
-  LoaderArgs,
+  LoaderFunctionArgs,
   MetaFunction,
   SerializeFrom,
 } from "@remix-run/node";
@@ -21,15 +20,12 @@ import type React from "react";
 import { getAdmin, getCustomer, getPropertyManager } from "~/lib/user.server";
 import { UserRole } from "~/roles";
 import { getUserId, getUserRole } from "./lib/session.server";
-import styles from "./styles/app.css";
-import { MantineProvider } from "@mantine/core";
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: styles }];
-};
+import "./styles/tailwind.css";
+import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
 
 export type RootLoaderData = SerializeFrom<typeof loader>;
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserId(request);
   const userRole = await getUserRole(request);
 
@@ -59,11 +55,13 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json(response);
 };
 
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: appConfig.name,
-  viewport: "width=device-width,initial-scale=1",
-});
+export const meta: MetaFunction = () => [
+  {
+    charset: "utf-8",
+    title: appConfig.name,
+    viewport: "width=device-width,initial-scale=1",
+  },
+];
 
 export function Document({
   title,
@@ -78,13 +76,14 @@ export function Document({
         {title ? <title>{title}</title> : null}
         <Meta />
         <Links />
-        <StylesPlaceholder />
       </head>
       <body className="h-full">
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+        <MantineProvider>
+          {children}
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </MantineProvider>
       </body>
     </html>
   );
@@ -93,13 +92,9 @@ export function Document({
 export default function App() {
   return (
     <Document>
-      <ModalsProvider>
-        <MantineProvider>
-          <NotificationsProvider autoClose={2000} limit={3}>
-            <Outlet />
-          </NotificationsProvider>
-        </MantineProvider>
-      </ModalsProvider>
+      <MantineModalsProvider>
+        <Outlet />
+      </MantineModalsProvider>
     </Document>
   );
 }
