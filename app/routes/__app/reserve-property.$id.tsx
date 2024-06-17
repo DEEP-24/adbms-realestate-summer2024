@@ -52,7 +52,7 @@ export const action = async ({ request, params }: DataFunctionArgs) => {
     },
   });
 
-  return redirect("/properties");
+  return redirect("/reservations");
 };
 
 export default function ReserveProperty() {
@@ -66,6 +66,9 @@ export default function ReserveProperty() {
 
   return (
     <div className="w-full h-full">
+      <span className="text-xl font-semibold text-center">
+        {property.title}
+      </span>
       <fetcher.Form method="post" className="flex flex-col gap-4 p-5">
         <div className="flex flex-col gap-2">
           <label htmlFor="startDate" className="text-lg font-semibold">
