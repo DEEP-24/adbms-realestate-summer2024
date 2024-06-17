@@ -10,11 +10,10 @@
     "build:css": "tailwindcss -m -i ./styles/app.css -o app/styles/app.css",
     "clean": "rimraf .cache ./server/dist ./build ./public/build \"./app/styles/app.css\"",
     "lint": "bunx @biomejs/biome check --apply .",
-    "dev": "run-p dev:*",
-    "dev:remix": "remix dev",
+    "dev": "remix dev",
     "dev:css": "tailwindcss -i ./styles/app.css -o app/styles/app.css --watch",
     "postinstall": "prisma generate",
-    "setup": "npx prisma db push && npx prisma db seed"
+    "setup": "bunx prisma db push && bunx prisma db seed"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",

@@ -1,13 +1,9 @@
 import type { LoaderArgs, SerializeFrom } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import type { ShouldReloadFunction } from "@remix-run/react";
 import Navbar from "~/components/Navbar";
-import {
-  isAdmin,
-  isPropertyManager,
-  requireUserId,
-} from "~/lib/session.server";
-import { useOptionCustomer } from "~/utils/hooks";
+import { isAdmin, isCustomer, requireUserId } from "~/lib/session.server";
+import { useOptionalPropertyManager } from "~/utils/hooks";
 
 export type AppLoaderData = SerializeFrom<typeof loader>;
 export const loader = async ({ request }: LoaderArgs) => {
@@ -16,18 +12,20 @@ export const loader = async ({ request }: LoaderArgs) => {
   if (await isAdmin(request)) {
     return redirect("/admin");
   }
-  if (await isPropertyManager(request)) {
-    return redirect("/property-manager");
+  if (await isCustomer(request)) {
+    return redirect("/");
   }
 
-  return null;
+  return json({});
 };
 
 export default function AppLayout() {
-  const user = useOptionCustomer();
+  // const { user } = useOptionalUser();
+  const user = useOptionalPropertyManager();
+
   return (
     <div className="h-full">
-      <Navbar user={user} />
+      <Navbar userName={user!.name} userEmail={user!.email} />
     </div>
   );
 }

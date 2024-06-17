@@ -13,6 +13,7 @@ export async function getUserById(id: User["id"]) {
       name: true,
       email: true,
       address: true,
+      role: true,
     },
   });
 }

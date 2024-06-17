@@ -2,10 +2,17 @@ import type { LoaderArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { getUser } from "~/lib/session.server";
+import { UserRole } from "~/roles";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getUser(request);
-  if (user) {
+  if (user?.role === UserRole.ADMIN) {
+    return redirect("/admin");
+  }
+  if (user?.role === UserRole.PROPERTY_MANAGER) {
+    return redirect("/property-manager");
+  }
+  if (user?.role === UserRole.USER) {
     return redirect("/");
   }
 

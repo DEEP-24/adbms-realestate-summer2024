@@ -16,6 +16,7 @@ async function main() {
       name: "Admin User",
       email: "admin@app.com",
       password: await createPasswordHash("password"),
+      phoneNo: "1234567890",
       address: "123 Admin Street",
     },
   });

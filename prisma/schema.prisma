@@ -12,9 +12,13 @@ model Admin {
   name     String
   email    String @unique
   password String
+  phoneNo  String
   address  String
 
   role UserRole @default(ADMIN)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("admin")
 }

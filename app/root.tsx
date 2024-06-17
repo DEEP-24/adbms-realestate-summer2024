@@ -1,6 +1,6 @@
 import { ModalsProvider } from "@mantine/modals";
-import { NotificationsProvider } from "@mantine/notifications";
 import { StylesPlaceholder } from "@mantine/remix";
+import { NotificationsProvider } from "@mantine/notifications";
 import type {
   LinksFunction,
   LoaderArgs,
@@ -22,6 +22,7 @@ import { getAdmin, getCustomer, getPropertyManager } from "~/lib/user.server";
 import { UserRole } from "~/roles";
 import { getUserId, getUserRole } from "./lib/session.server";
 import styles from "./styles/app.css";
+import { MantineProvider } from "@mantine/core";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
@@ -93,9 +94,11 @@ export default function App() {
   return (
     <Document>
       <ModalsProvider>
-        <NotificationsProvider autoClose={2000} limit={3}>
-          <Outlet />
-        </NotificationsProvider>
+        <MantineProvider>
+          <NotificationsProvider autoClose={2000} limit={3}>
+            <Outlet />
+          </NotificationsProvider>
+        </MantineProvider>
       </ModalsProvider>
     </Document>
   );

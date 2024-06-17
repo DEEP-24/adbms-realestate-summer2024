@@ -1,19 +1,60 @@
-import type { User } from "@prisma/client";
+import { Form, NavLink } from "@remix-run/react";
 import Container from "~/components/container";
 import Logo from "~/components/logo";
+import { cn } from "~/lib/utils";
+import type { NavbarLink } from "~/routes/admin";
 
 interface NavbarProps {
-  user: User | null;
+  userName: string;
+  userEmail: string;
+  navLinks?: NavbarLink[];
 }
 
-export default function Navbar({ user }: NavbarProps) {
+export default function Navbar({ userName, userEmail, navLinks }: NavbarProps) {
   return (
-    <div className="fixed w-full bg-white z-10 shadow-sm">
+    <div className="sticky w-full bg-white z-10 shadow-sm">
       <div className="py-4 border-b-[1px]">
         <Container>
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
             <Logo />
-            {user?.name}
+            <div className="flex items-center justify-center">
+              {navLinks?.map((navLink) => (
+                <NavLink
+                  to={navLink.href}
+                  key={navLink.id}
+                  className={({ isActive }) =>
+                    cn(
+                      "bg-gray-100 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 hover:rounded-lg",
+                      isActive &&
+                        "rounded-lg px-3 py-2 transition-all hover:bg-gray-300 bg-gray-300",
+                    )
+                  }
+                >
+                  {navLink.label}
+                </NavLink>
+              ))}
+            </div>
+            <div className="flex items-center justify-center gap-4">
+              <div className="flex flex-col items-center justify-center">
+                <span>{userName}</span>
+                <span>{userEmail}</span>
+              </div>
+              <div>
+                <Form
+                  replace={true}
+                  action="/api/auth/logout"
+                  method="post"
+                  id="logout-form"
+                />
+                <button
+                  type="submit"
+                  form="logout-form"
+                  className="text-red-500 border-2 rounded-xl p-4 hover:bg-red-300"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
           </div>
         </Container>
       </div>
