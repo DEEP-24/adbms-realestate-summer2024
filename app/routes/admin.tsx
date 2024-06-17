@@ -31,11 +31,16 @@ export type NavbarLink = {
 const NavLinks: NavbarLink[] = [
   {
     id: 1,
+    href: "/admin",
+    label: "Home",
+  },
+  {
+    id: 2,
     href: "/admin/properties",
     label: "Properties",
   },
   {
-    id: 2,
+    id: 3,
     href: "/admin/reservations",
     label: "Reservations",
   },
@@ -52,7 +57,7 @@ export default function AppLayout() {
           navLinks={NavLinks}
           userEmail={user!.email}
         />
-        <main className="flex-1 overflow-y-auto p-5">
+        <main className="flex-1 overflow-y-auto h-full">
           <Outlet />
         </main>
       </div>

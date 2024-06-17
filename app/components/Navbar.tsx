@@ -1,7 +1,6 @@
 import { Form, NavLink } from "@remix-run/react";
 import Container from "~/components/container";
 import Logo from "~/components/logo";
-import { cn } from "~/lib/utils";
 import type { NavbarLink } from "~/routes/admin";
 
 interface NavbarProps {
@@ -22,13 +21,7 @@ export default function Navbar({ userName, userEmail, navLinks }: NavbarProps) {
                 <NavLink
                   to={navLink.href}
                   key={navLink.id}
-                  className={({ isActive }) =>
-                    cn(
-                      "bg-gray-100 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 hover:rounded-lg",
-                      isActive &&
-                        "rounded-lg px-3 py-2 transition-all hover:bg-gray-300 bg-gray-300",
-                    )
-                  }
+                  className="bg-gray-100 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 hover:rounded-lg"
                 >
                   {navLink.label}
                 </NavLink>

@@ -76,6 +76,40 @@ async function main() {
     },
   });
 
+  const propertListing3 = await db.property.create({
+    data: {
+      title: "Beach House",
+      description: "A beautiful beach house.",
+      imageSrc:
+        "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhY2glMjBob3VzZXxlbnwwfHwwfHx8MA%3D%3D",
+      createdAt: new Date(),
+      category: "House",
+      roomCount: 3,
+      bathroomCount: 2,
+      guestCount: 6,
+      location: "Miami",
+      price: 3000,
+      propertyManagerId: propertyManager.id,
+    },
+  });
+
+  await db.property.create({
+    data: {
+      title: "Mountain Cabin",
+      description: "A cozy cabin in the mountains.",
+      imageSrc:
+        "https://images.unsplash.com/photo-1609349093648-51d2ceb5a72a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bW91bnRhaW4lMjBjYWJpbnxlbnwwfHwwfHx8MA%3D%3D",
+      createdAt: new Date(),
+      category: "Cabin",
+      roomCount: 2,
+      bathroomCount: 1,
+      guestCount: 4,
+      location: "Aspen",
+      price: 2000,
+      propertyManagerId: propertyManager.id,
+    },
+  });
+
   // Seed Reservations
   await db.reservation.create({
     data: {
@@ -95,6 +129,17 @@ async function main() {
       startDate: new Date("2024-07-01"),
       endDate: new Date("2024-07-05"),
       totalPrice: 7500,
+      createdAt: new Date(),
+    },
+  });
+
+  await db.reservation.create({
+    data: {
+      userId: user.id,
+      propertyId: propertListing3.id,
+      startDate: new Date("2024-08-01"),
+      endDate: new Date("2024-08-15"),
+      totalPrice: 45000,
       createdAt: new Date(),
     },
   });

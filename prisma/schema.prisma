@@ -61,11 +61,10 @@ model PropertyManager {
 }
 
 model Property {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String
   imageSrc      String
-  createdAt     DateTime @default(now())
   category      String
   roomCount     Int
   bathroomCount Int
@@ -81,6 +80,8 @@ model Property {
   propertyManagerId String?          @db.ObjectId
 
   request Request[]
+
+  createdAt DateTime @default(now())
 
   @@map("property")
 }
