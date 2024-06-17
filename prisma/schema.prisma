@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String @unique
+  password String
+  address  String
+
+  role UserRole @default(ADMIN)
+
+  @@map("admin")
+}
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String @unique
+  password String
+  phoneNo  String
+  address  String
+
+  role UserRole @default(USER)
+
+  requests     Request[]
+  reservations Reservation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model PropertyManager {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  email    String @unique
+  password String
+  phoneNo  String
+  address  String
+
+  role UserRole @default(PROPERTY_MANAGER)
+
+  listings Property[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("propertyManager")
+}
+
+model Property {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  imageSrc      String
+  createdAt     DateTime @default(now())
+  category      String
+  roomCount     Int
+  bathroomCount Int
+  guestCount    Int
+  location      String
+  price         Int
+
+  isAvailable Boolean @default(true)
+
+  reservations Reservation[]
+
+  propertyManager   PropertyManager? @relation(fields: [propertyManagerId], references: [id])
+  propertyManagerId String?          @db.ObjectId
+
+  request Request[]
+
+  @@map("property")
+}
+
+model Reservation {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  startDate  DateTime
+  endDate    DateTime
+  totalPrice Int
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String   @db.ObjectId
+
+  @@map("reservation")
+}
+
+model Request {
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  startDate DateTime
+  endDate   DateTime
+  status    RequestStatus
+  message   String?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+
+  property   Property @relation(fields: [propertyId], references: [id])
+  propertyId String   @db.ObjectId
+
+  @@map("request")
+}
+
+enum UserRole {
+  USER
+  PROPERTY_MANAGER
+  ADMIN
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
