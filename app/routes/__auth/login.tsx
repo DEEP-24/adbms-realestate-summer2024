@@ -1,14 +1,8 @@
-import {
-  Button,
-  Group,
-  PasswordInput,
-  Select,
-  Switch,
-  TextInput,
-} from "@mantine/core";
+import { Group, PasswordInput, Select, Switch, TextInput } from "@mantine/core";
 import type { ActionFunction } from "@remix-run/node";
 import { Link, useFetcher, useSearchParams } from "@remix-run/react";
 import appConfig from "app.config";
+import { Button } from "~/components/ui/button";
 import { createUserSession } from "~/lib/session.server";
 import { verifyLogin } from "~/lib/user.server";
 import { LoginSchema } from "~/lib/zod.schema";
@@ -59,73 +53,69 @@ export default function Login() {
   const isSubmitting = fetcher.state !== "idle";
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center gap-2 w-full">
+    <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center gap-2 w-[30vw]">
       <div>
         <h1 className="mt-6 text-3xl font-extrabold text-gray-900 text-center">
           Sign in
         </h1>
       </div>
-      <div className="flex items-center justify-center gap-4 w-[40%]">
-        <div className="flex items-center justify-center gap-2">
-          <img src="/logo.png" alt="Logo" className="w-16 h-16 mx-auto" />
-          <h3>{appConfig.name}</h3>
-        </div>
-        <div className="w-[60%]">
-          <fetcher.Form method="post" replace={true} className="mt-8">
-            <input type="hidden" name="redirectTo" value={redirectTo} />
-            <fieldset disabled={isSubmitting} className="flex flex-col gap-4">
-              <Select
-                data={Object.values(UserRole).map((role) => ({
-                  value: role,
-                  label: role,
-                }))}
-                name="role"
-                label="Role"
-                error={actionData?.fieldErrors?.role}
-                required={true}
-              />
-              <TextInput
-                name="email"
-                type="email"
-                autoComplete="email"
-                label="Email address"
-                error={actionData?.fieldErrors?.email}
-                required={true}
-              />
-              <PasswordInput
-                name="password"
-                label="Password"
-                error={actionData?.fieldErrors?.password}
-                autoComplete="current-password"
-                required={true}
-              />
-              <div className="flex justify-between items-center mt-2">
-                <Group position="apart">
-                  <Switch
-                    id="remember-me"
-                    name="rememberMe"
-                    label="Remember me"
-                  />
-                </Group>
-                <Link
-                  to="/sign-up"
-                  className="text-sm text-gray-600 underline hover:text-black"
-                >
-                  Sign Up
-                </Link>
-              </div>
-              <Button
-                type="submit"
-                loading={isSubmitting}
-                fullWidth={true}
-                loaderPosition="right"
-                mt="1rem"
+      <div className="flex items-center justify-center gap-2">
+        <img src="/logo.png" alt="Logo" className="w-16 h-16 mx-auto" />
+        <h3>{appConfig.name}</h3>
+      </div>
+      <div className="w-full p-5">
+        <fetcher.Form method="post" replace={true} className="mt-8">
+          <input type="hidden" name="redirectTo" value={redirectTo} />
+          <fieldset disabled={isSubmitting} className="flex flex-col gap-4">
+            <Select
+              data={Object.values(UserRole).map((role) => ({
+                value: role,
+                label: role,
+              }))}
+              name="role"
+              label="Role"
+              error={actionData?.fieldErrors?.role}
+              required={true}
+            />
+            <TextInput
+              name="email"
+              type="email"
+              autoComplete="email"
+              label="Email address"
+              error={actionData?.fieldErrors?.email}
+              required={true}
+            />
+            <PasswordInput
+              name="password"
+              label="Password"
+              error={actionData?.fieldErrors?.password}
+              autoComplete="current-password"
+              required={true}
+            />
+            <div className="flex justify-between items-center mt-2">
+              <Group>
+                <Switch
+                  id="remember-me"
+                  name="rememberMe"
+                  label="Remember me"
+                />
+              </Group>
+              <Link
+                to="/sign-up"
+                className="text-sm text-gray-600 underline hover:text-black"
               >
-                Sign in
-              </Button>
-            </fieldset>
-          </fetcher.Form>
-        </div>
+                Sign Up
+              </Link>
+            </div>
+            <Button
+              type="submit"
+              variant="secondary"
+              className="hover:bg-blue-300 rounded-xl mt-5"
+            >
+              Sign in
+            </Button>
+          </fieldset>
+        </fetcher.Form>
       </div>
     </div>
   );

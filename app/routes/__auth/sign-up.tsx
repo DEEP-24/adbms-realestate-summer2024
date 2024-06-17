@@ -1,5 +1,4 @@
 import {
-  Button,
   Group,
   PasswordInput,
   Select,
@@ -9,6 +8,8 @@ import {
 } from "@mantine/core";
 import type { ActionFunction } from "@remix-run/node";
 import { Link, useFetcher, useSearchParams } from "@remix-run/react";
+import appConfig from "app.config";
+import { Button } from "~/components/ui/button";
 import { createUserSession } from "~/lib/session.server";
 import { createUser, getUserByEmail } from "~/lib/user.server";
 import { RegisterUserSchema } from "~/lib/zod.schema";
@@ -69,22 +70,31 @@ export default function SignUp() {
   const isSubmitting = fetcher.state !== "idle";
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center gap-2 w-[40vw]">
+    <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center gap-2 w-[30vw]">
       <div>
-        <h1 className="mt-6 font-extrabold text-gray-900 text-center">
+        <h1 className="mt-6 text-3xl font-extrabold text-gray-900 text-center">
           Sign Up
         </h1>
       </div>
-      <div className="flex items-center justify-center gap-4 w-full">
-        <div className="flex flex-col items-center justify-center gap-2 w-[40%]">
-          <img src="/logo.png" alt="Logo" className="w-16 h-16 mx-auto" />
-          <h3>Online Grocery Store</h3>
-        </div>
-        <div className="w-[60%]">
-          <fetcher.Form method="post" replace={true} className="mt-8">
-            <input type="hidden" name="redirectTo" value={redirectTo} />
+      <div className="flex items-center justify-center gap-2">
+        <img src="/logo.png" alt="Logo" className="w-16 h-16 mx-auto" />
+        <h3>{appConfig.name}</h3>
+      </div>
+      <div className="w-full p-5">
+        <fetcher.Form method="post" replace={true} className="mt-8">
+          <input type="hidden" name="redirectTo" value={redirectTo} />
 
-            <fieldset disabled={isSubmitting} className="flex flex-col gap-4">
+          <fieldset disabled={isSubmitting} className="flex flex-col gap-4">
+            <div className="flex justify-between inset-0 gap-2 w-full">
+              <TextInput
+                name="name"
+                autoComplete="given-name"
+                label="Name"
+                error={actionData?.fieldErrors?.name}
+                required={true}
+                className="w-full"
+              />
+
               <Select
                 data={Object.values(UserRole)
                   .map((role) => ({
@@ -96,83 +106,77 @@ export default function SignUp() {
                 label="Role"
                 error={actionData?.fieldErrors?.role}
                 required={true}
+                className="w-full"
               />
+            </div>
 
-              <TextInput
-                name="name"
-                autoComplete="given-name"
-                label="Name"
-                error={actionData?.fieldErrors?.name}
-                required={true}
-              />
+            <TextInput
+              name="email"
+              type="email"
+              autoComplete="email"
+              label="Email address"
+              error={actionData?.fieldErrors?.email}
+              required={true}
+            />
 
-              <TextInput
-                name="email"
-                type="email"
-                autoComplete="email"
-                label="Email address"
-                error={actionData?.fieldErrors?.email}
-                required={true}
-              />
-
+            <div className="flex justify-between inset-0 w-full gap-2">
               <PasswordInput
                 name="password"
                 label="Password"
                 error={actionData?.fieldErrors?.password}
                 autoComplete="current-password"
                 required={true}
+                className="w-full"
               />
-
               <PasswordInput
                 name="confirmPassword"
                 label="Confirm Password"
                 error={actionData?.fieldErrors?.confirmPassword}
                 autoComplete="current-password"
                 required={true}
+                className="w-full"
               />
+            </div>
 
-              <TextInput
-                name="phoneNo"
-                type="tel"
-                label="Phone Number"
-                error={actionData?.fieldErrors?.phoneNo}
-                required={true}
-              />
+            <TextInput
+              name="phoneNo"
+              type="tel"
+              label="Phone Number"
+              error={actionData?.fieldErrors?.phoneNo}
+              required={true}
+            />
 
-              <Textarea
-                name="address"
-                label="Address"
-                autoComplete="street-address"
-              />
+            <Textarea
+              name="address"
+              label="Address"
+              autoComplete="street-address"
+            />
 
-              <div className="flex justify-between items-center mt-2">
-                <Group position="apart">
-                  <Switch
-                    id="remember-me"
-                    name="rememberMe"
-                    label="Remember me"
-                  />
-                </Group>
-                <Link
-                  to="/login"
-                  className="text-sm text-gray-600 underline hover:text-black"
-                >
-                  Sign In
-                </Link>
-              </div>
-
-              <Button
-                type="submit"
-                loading={isSubmitting}
-                fullWidth={true}
-                loaderPosition="right"
-                mt="1rem"
+            <div className="flex justify-between items-center mt-2">
+              <Group position="apart">
+                <Switch
+                  id="remember-me"
+                  name="rememberMe"
+                  label="Remember me"
+                />
+              </Group>
+              <Link
+                to="/login"
+                className="text-sm text-gray-600 underline hover:text-black"
               >
-                Sign Up
-              </Button>
-            </fieldset>
-          </fetcher.Form>
-        </div>
+                Sign In
+              </Link>
+            </div>
+
+            <Button
+              type="submit"
+              variant="secondary"
+              className="hover:bg-blue-300 rounded-xl mt-2"
+            >
+              Sign Up
+            </Button>
+          </fieldset>
+        </fetcher.Form>
       </div>
     </div>
   );
