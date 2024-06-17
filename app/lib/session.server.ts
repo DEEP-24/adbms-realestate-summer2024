@@ -119,6 +119,14 @@ export async function logout(request: Request) {
   });
 }
 
+export async function getUserRole(
+  request: Request,
+): Promise<User["role"] | undefined> {
+  const session = await getSession(request);
+  const userRole = session.get(USER_ROLE_KEY);
+  return userRole;
+}
+
 export async function isAdmin(request: Request) {
   const session = await getSession(request);
   return session.get(USER_ROLE_KEY) === UserRole.ADMIN;

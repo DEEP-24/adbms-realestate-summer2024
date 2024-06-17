@@ -1,6 +1,7 @@
-import type { User } from "@prisma/client";
+import type { Admin, PropertyManager, User } from "@prisma/client";
 import * as bcrypt from "bcryptjs";
 import { db } from "~/lib/prisma.server";
+import { getUserId, logout } from "~/lib/session.server";
 import { UserRole } from "~/roles";
 import { createPasswordHash } from "~/utils/misc.server";
 
@@ -75,7 +76,7 @@ export async function verifyLogin(
   role: User["role"],
 ) {
   if (role === UserRole.ADMIN) {
-    const adminWithPassword = await db.user.findUnique({
+    const adminWithPassword = await db.admin.findUnique({
       where: { email },
     });
 
@@ -113,7 +114,7 @@ export async function verifyLogin(
     return userWithoutPassword;
   }
   if (role === UserRole.PROPERTY_MANAGER) {
-    const propertyManagerWithPassword = await db.user.findUnique({
+    const propertyManagerWithPassword = await db.propertyManager.findUnique({
       where: { email },
     });
 
@@ -135,4 +136,67 @@ export async function verifyLogin(
 
     return propertyManagerwithoutPassword;
   }
+}
+
+export async function getAdminById(id: Admin["id"]) {
+  return db.admin.findUnique({
+    where: { id },
+  });
+}
+
+export async function getCustomerById(id: User["id"]) {
+  return db.user.findUnique({
+    where: { id },
+  });
+}
+
+export async function getPropertyManagerById(id: PropertyManager["id"]) {
+  return db.propertyManager.findUnique({
+    where: { id },
+  });
+}
+
+export async function getAdmin(request: Request) {
+  const userId = await getUserId(request);
+
+  if (userId === undefined) {
+    return null;
+  }
+
+  const admin = await getAdminById(userId);
+  if (admin) {
+    return admin;
+  }
+
+  throw await logout(request);
+}
+
+export async function getCustomer(request: Request) {
+  const userId = await getUserId(request);
+
+  if (userId === undefined) {
+    return null;
+  }
+
+  const customer = await getCustomerById(userId);
+  if (customer) {
+    return customer;
+  }
+
+  throw await logout(request);
+}
+
+export async function getPropertyManager(request: Request) {
+  const userId = await getUserId(request);
+
+  if (userId === undefined) {
+    return null;
+  }
+
+  const propertyManager = await getPropertyManagerById(userId);
+  if (propertyManager) {
+    return propertyManager;
+  }
+
+  throw await logout(request);
 }

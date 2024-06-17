@@ -97,11 +97,11 @@ export default function SignUp() {
 
               <Select
                 data={Object.values(UserRole)
+                  .filter((role) => role !== UserRole.ADMIN)
                   .map((role) => ({
                     value: role,
                     label: role,
-                  }))
-                  .filter((role) => role.value !== "admin")}
+                  }))}
                 name="role"
                 label="Role"
                 error={actionData?.fieldErrors?.role}

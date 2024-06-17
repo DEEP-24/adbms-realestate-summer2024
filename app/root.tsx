@@ -18,7 +18,9 @@ import {
 } from "@remix-run/react";
 import appConfig from "app.config";
 import type React from "react";
-import { getUser } from "./lib/session.server";
+import { getAdmin, getCustomer, getPropertyManager } from "~/lib/user.server";
+import { UserRole } from "~/roles";
+import { getUserId, getUserRole } from "./lib/session.server";
 import styles from "./styles/app.css";
 
 export const links: LinksFunction = () => {
@@ -27,8 +29,33 @@ export const links: LinksFunction = () => {
 
 export type RootLoaderData = SerializeFrom<typeof loader>;
 export const loader = async ({ request }: LoaderArgs) => {
-  const user = await getUser(request);
-  return json({ user });
+  const userId = await getUserId(request);
+  const userRole = await getUserRole(request);
+
+  // biome-ignore lint/style/useConst: <explanation>
+  let response: {
+    admin: Awaited<ReturnType<typeof getAdmin>>;
+    user: Awaited<ReturnType<typeof getCustomer>>;
+    propertyManager: Awaited<ReturnType<typeof getPropertyManager>>;
+  } = {
+    admin: null,
+    user: null,
+    propertyManager: null,
+  };
+
+  if (!userId || !userRole) {
+    return json(response);
+  }
+
+  if (userRole === UserRole.ADMIN) {
+    response.admin = await getAdmin(request);
+  } else if (userRole === UserRole.USER) {
+    response.user = await getCustomer(request);
+  } else if (userRole === UserRole.PROPERTY_MANAGER) {
+    response.propertyManager = await getPropertyManager(request);
+  }
+
+  return json(response);
 };
 
 export const meta: MetaFunction = () => ({
