@@ -11,3 +11,5 @@
 /app/styles/app.css
 
 ./server/dist
+
+.DS_Store

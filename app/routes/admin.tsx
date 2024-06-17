@@ -19,7 +19,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { isPropertyManager, requireUser } from "~/lib/session.server";
 import { cn } from "~/lib/utils";
-import { useOptionalUser } from "~/utils/hooks";
 
 export type AppLoaderData = SerializeFrom<typeof loader>;
 export const loader = async ({ request }: LoaderArgs) => {
@@ -33,7 +32,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 
 export default function AppLayout() {
-  const { user } = useOptionalUser();
+  // const { user } = useOptionalUser();
 
   return (
     <>

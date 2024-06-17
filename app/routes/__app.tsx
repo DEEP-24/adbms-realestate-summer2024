@@ -7,7 +7,6 @@ import {
   isPropertyManager,
   requireUserId,
 } from "~/lib/session.server";
-import { useOptionalUser } from "~/utils/hooks";
 
 export type AppLoaderData = SerializeFrom<typeof loader>;
 export const loader = async ({ request }: LoaderArgs) => {
@@ -28,11 +27,9 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 
 export default function AppLayout() {
-  const user = useOptionalUser();
-
   return (
     <div className="h-full">
-      <Navbar user={user} />
+      <Navbar />
     </div>
   );
 }

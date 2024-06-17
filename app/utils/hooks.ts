@@ -1,13 +1,12 @@
-import { useMatches, useRouteLoaderData } from "@remix-run/react";
+import { useMatches } from "@remix-run/react";
 import * as React from "react";
 import type { RootLoaderData } from "~/root";
-import type { AppLoaderData } from "~/routes/__app";
-/**
- * This base hook is used in other hooks to quickly search for specific data
- * across all loader data using useMatches.
- * @param {string} routeId The route id
- * @returns {JSON|undefined} The router data or undefined if not found
- */
+// /**
+//  * This base hook is used in other hooks to quickly search for specific data
+//  * across all loader data using useMatches.
+//  * @param {string} routeId The route id
+//  * @returns {JSON|undefined} The router data or undefined if not found
+//  */
 export function useMatchesData(
   routeId: string,
 ): Record<string, unknown> | undefined {
@@ -21,7 +20,7 @@ export function useMatchesData(
 }
 
 export function useOptionalAdmin() {
-  const { admin } = useRouteLoaderData("root") as RootLoaderData;
+  const { admin } = useMatchesData("root") as RootLoaderData;
   return admin;
 }
 
@@ -37,7 +36,7 @@ export function useAdmin() {
 }
 
 export function useOptionCustomer() {
-  const { user } = useRouteLoaderData("root") as RootLoaderData;
+  const { user } = useMatchesData("root") as RootLoaderData;
   return user;
 }
 
@@ -53,7 +52,7 @@ export function useCustomer() {
 }
 
 export function useOptionalPropertyManager() {
-  const { propertyManager } = useRouteLoaderData("root") as RootLoaderData;
+  const { propertyManager } = useMatchesData("root") as RootLoaderData;
   return propertyManager;
 }
 
@@ -68,9 +67,9 @@ export function usePropertyManager() {
   return maybePropertyManager;
 }
 
-export function useAppData() {
-  return useMatchesData("routes/__app") as AppLoaderData;
-}
+// export function useAppData() {
+//   return useMatchesData("routes/__app") as AppLoaderData;
+// }
 
 type ReturnType<T> = [T, React.Dispatch<React.SetStateAction<T>>];
 export function useLocalStorageState<T>({

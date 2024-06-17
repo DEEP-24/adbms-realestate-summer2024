@@ -2,7 +2,6 @@ import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { useDisclosure } from "@mantine/hooks";
 import { useNavigate } from "@remix-run/react";
 import * as React from "react";
-import { useOptionalUser } from "~/utils/hooks";
 
 type ActionData = Partial<{
   success: boolean;
@@ -64,7 +63,7 @@ type ActionData = Partial<{
 // }
 
 export default function Cart() {
-  const { user } = useOptionalUser();
+  // const { user } = useOptionalUser();
   const navigate = useNavigate();
   const [isSearchModalOpen, handleOpenSearchModal] = useDisclosure(false, {
     onClose: () => {
