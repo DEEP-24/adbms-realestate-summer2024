@@ -19,7 +19,11 @@ export default function Properties() {
         {properties.length > 0 ? (
           properties.map((property) => (
             // @ts-ignore
-            <PropertyCard property={property} key={property.id} />
+            <PropertyCard
+              property={property}
+              key={property.id}
+              showReserveButton={true}
+            />
           ))
         ) : (
           <EmptyState />

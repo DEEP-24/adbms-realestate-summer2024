@@ -3,9 +3,13 @@ import { Link } from "@remix-run/react";
 
 interface PropertCardProps {
   property: Property;
+  showReserveButton?: boolean;
 }
 
-export default function PropertyCard({ property }: PropertCardProps) {
+export default function PropertyCard({
+  property,
+  showReserveButton,
+}: PropertCardProps) {
   return (
     <div className="col-span-1 cursor-pointer group">
       <div className="flex flex-col gap-2">
@@ -22,11 +26,13 @@ export default function PropertyCard({ property }: PropertCardProps) {
         <div className="font-semibold text-lg">
           {property.location}, {property.price}
         </div>
-        <div>
-          <Link to={`/reserve-property/${property.id}`}>
-            <button className="border-2 bg-gray-300 p-2">Reserve</button>
-          </Link>
-        </div>
+        {showReserveButton && (
+          <div>
+            <Link to={`/reserve-property/${property.id}`}>
+              <button className="border-2 bg-gray-300 p-2">Reserve</button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
