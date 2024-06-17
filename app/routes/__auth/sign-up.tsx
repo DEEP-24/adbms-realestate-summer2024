@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
     return badRequest<ActionData>({ fieldErrors });
   }
 
-  const { email, password, name, phoneNo, address, role } = fields;
+  const { email, password, firstName, lastName, phoneNo, address, role, dob, city, zipcode } = fields;
 
   const existingUser = await getUserByEmail(email);
   if (existingUser) {
@@ -44,11 +44,15 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   const user = await createUser({
-    name,
+    firstName,
+    lastName,
     email,
     password,
     phoneNo,
     address,
+    dob: new Date(dob),
+    city,
+    zipcode,
     role,
   });
 
@@ -70,7 +74,7 @@ export default function SignUp() {
   const isSubmitting = fetcher.state !== "idle";
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center gap-2 w-[30vw]">
+    <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center gap-2 w-[30vw] top-1">
       <div>
         <h1 className="mt-6 text-3xl font-extrabold text-gray-900 text-center">
           Sign Up
@@ -85,29 +89,52 @@ export default function SignUp() {
           <input type="hidden" name="redirectTo" value={redirectTo} />
 
           <fieldset disabled={isSubmitting} className="flex flex-col gap-4">
+              <div className="flex items-center justify-between inset-0 gap-2 w-full">
+                <Select
+                  data={Object.values(UserRole)
+                    .filter((role) => role !== UserRole.ADMIN)
+                    .map((role) => ({
+                      value: role,
+                      label: role,
+                    }))}
+                  name="role"
+                  label="Role"
+                  error={actionData?.fieldErrors?.role}
+                  required={true}
+                  className="w-full"
+                />
+               <div className="flex flex-col items-center justify-center">
+                <label htmlFor="dob" className="block text-sm font-medium text-gray-700">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  id="dob"
+                  name="dob"
+                  className="mt-1 block w-full shadow-sm sm:text-sm border-gray-500 border-2 rounded-lg p-1"
+                  required={true}
+                />
+               </div>
+              </div>
+
             <div className="flex justify-between inset-0 gap-2 w-full">
               <TextInput
-                name="name"
+                name="firstName"
                 autoComplete="given-name"
-                label="Name"
-                error={actionData?.fieldErrors?.name}
+                label="First Name"
+                error={actionData?.fieldErrors?.firstName}
                 required={true}
                 className="w-full"
               />
 
-              <Select
-                data={Object.values(UserRole)
-                  .filter((role) => role !== UserRole.ADMIN)
-                  .map((role) => ({
-                    value: role,
-                    label: role,
-                  }))}
-                name="role"
-                label="Role"
-                error={actionData?.fieldErrors?.role}
+              <TextInput
+                name="lastName"
+                autoComplete="given-name"
+                label="Last Name"
+                error={actionData?.fieldErrors?.lastName}
                 required={true}
                 className="w-full"
-              />
+              />           
             </div>
 
             <TextInput
@@ -151,6 +178,24 @@ export default function SignUp() {
               label="Address"
               autoComplete="street-address"
             />
+
+            <div className="flex justify-between inset-0 gap-2 w-full">
+              <TextInput
+                name="city"
+                label="City"
+                error={actionData?.fieldErrors?.city}
+                required={true}
+                className="w-full"
+              />
+
+              <TextInput
+                name="zipcode"
+                label="Zip Code"
+                error={actionData?.fieldErrors?.zipcode}
+                required={true}
+                className="w-full"
+              />           
+            </div>
 
             <div className="flex justify-between items-center mt-2">
               <Group position="apart">

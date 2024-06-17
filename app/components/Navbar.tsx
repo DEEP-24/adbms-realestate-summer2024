@@ -21,7 +21,7 @@ export default function Navbar({ userName, userEmail, navLinks }: NavbarProps) {
                 <NavLink
                   to={navLink.href}
                   key={navLink.id}
-                  className="bg-gray-100 rounded-lg px-3 py-2 transition-all hover:bg-gray-100 hover:rounded-lg"
+                  className="rounded-lg px-3 py-2 transition-all hover:bg-gray-100 hover:rounded-lg"
                 >
                   {navLink.label}
                 </NavLink>

@@ -46,7 +46,7 @@ export default function AppLayout() {
     <div className="h-full">
       <div className="flex flex-col h-full">
         <Navbar
-          userName={user!.name}
+          userName={user!.firstName + " " + user!.lastName}
           navLinks={NavLinks}
           userEmail={user!.email}
         />

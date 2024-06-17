@@ -68,7 +68,7 @@ export default function Reservations() {
                   </td>
 
                   <td className="py-6 pr-8 sm:table-cell">
-                    {reservation.user.name}
+                    {reservation.user.firstName} {reservation.user.lastName} -
                     {reservation.user.email}
                   </td>
 

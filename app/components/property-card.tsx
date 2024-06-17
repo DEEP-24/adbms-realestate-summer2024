@@ -12,18 +12,18 @@ export default function PropertyCard({
 }: PropertCardProps) {
   return (
     <div className="col-span-1 cursor-pointer group">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <div className="overflow-hidden rounded-xl">
           <img
-            height={300}
+            height="auto"
             width={300}
             className="object-cover group-hover:scale-110 transition"
             src={property.imageSrc}
             alt="Property"
           />
         </div>
-        <div>{property.title}</div>
-        <div className="font-semibold text-lg">
+        <div className="font-semibold text-lg">{property.title}</div>
+        <div className="">
           {property.location}, {property.price}
         </div>
         {showReserveButton && (

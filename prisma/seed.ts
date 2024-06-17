@@ -4,8 +4,8 @@ import { createPasswordHash } from "~/utils/misc.server";
 const db = new PrismaClient();
 
 async function main() {
-  await db.user.deleteMany();
   await db.admin.deleteMany();
+  await db.user.deleteMany();
   await db.propertyManager.deleteMany();
   await db.property.deleteMany();
   await db.reservation.deleteMany();
@@ -13,31 +13,43 @@ async function main() {
 
   await db.admin.create({
     data: {
-      name: "Admin User",
+      firstName: "Admin",
+      lastName: "User",
       email: "admin@app.com",
       password: await createPasswordHash("password"),
+      dob: new Date("1990-01-01"),
       phoneNo: "1234567890",
       address: "123 Admin Street",
+      city: "Admin City",
+      zipcode: "12345",
     },
   });
 
   const user = await db.user.create({
     data: {
-      name: "John Doe",
+      firstName: "John",
+      lastName: "Doe",
       email: "user@app.com",
       password: await createPasswordHash("password"),
       phoneNo: "1234567890",
       address: "123 User Street",
+      dob: new Date("1990-01-01"),
+      city: "User City",
+      zipcode: "12345",
     },
   });
 
   const propertyManager = await db.propertyManager.create({
     data: {
-      name: "Property Manager One",
+      firstName: "Property",
+      lastName: "Manager",
       email: "propertymanager@app.com",
       password: await createPasswordHash("password"),
       phoneNo: "1234567890",
       address: "123 Property Manager Street",
+      dob: new Date("1990-01-01"),
+      city: "Property Manager City",
+      zipcode: "12345"
     },
   });
 

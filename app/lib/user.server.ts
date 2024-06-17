@@ -10,7 +10,8 @@ export async function getUserById(id: User["id"]) {
     where: { id },
     select: {
       id: true,
-      name: true,
+      firstName: true,
+      lastName: true,
       email: true,
       address: true,
       role: true,
@@ -22,7 +23,8 @@ export async function getUserByEmail(email: User["email"]) {
   return db.user.findUnique({
     where: { email },
     select: {
-      name: true,
+      firstName: true,
+      lastName: true,
       email: true,
     },
   });
@@ -31,39 +33,55 @@ export async function getUserByEmail(email: User["email"]) {
 export async function createUser({
   email,
   password,
-  name,
+  firstName,
+  lastName,
   role,
   phoneNo,
   address,
+  dob,
+  city,
+  zipcode,
 }: {
   email: User["email"];
   password: string;
-  name: User["name"];
+  firstName: User["firstName"];
+  lastName: User["lastName"];
   role: User["role"];
   phoneNo: User["phoneNo"];
   address: User["address"];
+  dob: User["dob"];
+  city: User["city"];
+  zipcode: User["zipcode"];
 }) {
   if (role === UserRole.USER) {
     return db.user.create({
       data: {
-        name,
+        firstName,
+        lastName,
         email,
         password: await createPasswordHash(password),
         role,
         phoneNo,
         address,
+        dob,
+        city,
+        zipcode,
       },
     });
   }
   if (role === UserRole.PROPERTY_MANAGER) {
     return db.propertyManager.create({
       data: {
-        name,
+        firstName,
+        lastName,
         email,
         password: await createPasswordHash(password),
         role,
         phoneNo,
         address,
+        dob,
+        city,
+        zipcode
       },
     });
   }

@@ -15,7 +15,7 @@ export default function Properties() {
 
   return (
     <div className="w-full h-full">
-      <div className="pt-24 grid grid-cols-4 gap-8 w-full">
+      <div className="p-5 grid grid-cols-4 gap-8 w-full">
         {properties.length > 0 ? (
           properties.map((property) => (
             // @ts-ignore

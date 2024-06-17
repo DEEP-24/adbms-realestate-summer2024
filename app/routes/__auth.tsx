@@ -33,7 +33,7 @@ export default function AuthLayout() {
           />
 
           <div className="absolute inset-0 bg-black/50" />
-          <div className="absolute flex items-center justify-center top-[20vh] w-full">
+          <div className="absolute flex items-center justify-center top-[10vh] w-full">
             <Outlet />
           </div>
         </div>
