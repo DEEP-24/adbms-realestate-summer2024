@@ -7,6 +7,7 @@ import {
   isPropertyManager,
   requireUserId,
 } from "~/lib/session.server";
+import { useOptionCustomer } from "~/utils/hooks";
 
 export type AppLoaderData = SerializeFrom<typeof loader>;
 export const loader = async ({ request }: LoaderArgs) => {
@@ -15,21 +16,18 @@ export const loader = async ({ request }: LoaderArgs) => {
   if (await isAdmin(request)) {
     return redirect("/admin");
   }
+  if (await isPropertyManager(request)) {
+    return redirect("/property-manager");
+  }
 
-  // const products = await getAllProducts();
-  // const categories = await getAllCategoriesWithProducts();
-
-  return json({
-    // products,
-    // categories,
-    isCustomer: await isPropertyManager(request),
-  });
+  return null;
 };
 
 export default function AppLayout() {
+  const user = useOptionCustomer();
   return (
     <div className="h-full">
-      <Navbar />
+      <Navbar user={user} />
     </div>
   );
 }

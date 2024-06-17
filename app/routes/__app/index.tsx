@@ -63,7 +63,6 @@ type ActionData = Partial<{
 // }
 
 export default function Cart() {
-  // const { user } = useOptionalUser();
   const navigate = useNavigate();
   const [isSearchModalOpen, handleOpenSearchModal] = useDisclosure(false, {
     onClose: () => {
