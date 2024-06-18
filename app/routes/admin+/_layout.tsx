@@ -44,6 +44,16 @@ const NavLinks: NavbarLink[] = [
     href: "/admin/reservations",
     label: "Reservations",
   },
+  {
+    id: 4,
+    href: "/admin/communities",
+    label: "Communities",
+  },
+  {
+    id: 5,
+    href: "/admin/property-managers",
+    label: "Property Managers",
+  },
 ];
 
 export default function AppLayout() {

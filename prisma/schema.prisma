@@ -66,6 +66,8 @@ model PropertyManager {
 
   listings Property[]
 
+  community Community?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -91,11 +93,28 @@ model Property {
   propertyManager   PropertyManager? @relation(fields: [propertyManagerId], references: [id])
   propertyManagerId String?          @db.ObjectId
 
+  community   Community? @relation(fields: [communityId], references: [id])
+  communityId String?    @db.ObjectId
+
   request Request[]
 
   createdAt DateTime @default(now())
 
   @@map("property")
+}
+
+model Community {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
+  propertyManager   PropertyManager? @relation(fields: [propertyManagerId], references: [id])
+  propertyManagerId String?          @unique @db.ObjectId
+
+  properties Property[]
+
+  createdAt DateTime @default(now())
+
+  @@map("community")
 }
 
 model Reservation {

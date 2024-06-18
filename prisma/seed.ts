@@ -25,7 +25,7 @@ async function main() {
     },
   });
 
-  const user = await db.user.create({
+  await db.user.create({
     data: {
       firstName: "John",
       lastName: "Doe",
@@ -53,8 +53,15 @@ async function main() {
     },
   });
 
+  const community1 = await db.community.create({
+    data: {
+      name: "Community 1",
+      propertyManagerId: propertyManager.id,
+    },
+  });
+
   // Seed Property Listings
-  const propertyListing1 = await db.property.create({
+  await db.property.create({
     data: {
       title: "Luxury Villa",
       description: "A beautiful luxury villa.",
@@ -68,10 +75,11 @@ async function main() {
       location: "Malibu",
       price: 5000,
       propertyManagerId: propertyManager.id,
+      communityId: community1.id,
     },
   });
 
-  const propertyListing2 = await db.property.create({
+  await db.property.create({
     data: {
       title: "Cozy Apartment",
       description: "A cozy apartment in the city center.",
@@ -85,23 +93,7 @@ async function main() {
       location: "New York",
       price: 1500,
       propertyManagerId: propertyManager.id,
-    },
-  });
-
-  const propertListing3 = await db.property.create({
-    data: {
-      title: "Beach House",
-      description: "A beautiful beach house.",
-      imageSrc:
-        "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhY2glMjBob3VzZXxlbnwwfHwwfHx8MA%3D%3D",
-      createdAt: new Date(),
-      category: "House",
-      roomCount: 3,
-      bathroomCount: 2,
-      guestCount: 6,
-      location: "Miami",
-      price: 3000,
-      propertyManagerId: propertyManager.id,
+      communityId: community1.id,
     },
   });
 
@@ -119,40 +111,6 @@ async function main() {
       location: "Aspen",
       price: 2000,
       propertyManagerId: propertyManager.id,
-    },
-  });
-
-  // Seed Reservations
-  await db.reservation.create({
-    data: {
-      userId: user.id,
-      propertyId: propertyListing1.id,
-      startDate: new Date("2024-06-01"),
-      endDate: new Date("2024-06-10"),
-      totalPrice: 50000,
-      createdAt: new Date(),
-    },
-  });
-
-  await db.reservation.create({
-    data: {
-      userId: user.id,
-      propertyId: propertyListing2.id,
-      startDate: new Date("2024-07-01"),
-      endDate: new Date("2024-07-05"),
-      totalPrice: 7500,
-      createdAt: new Date(),
-    },
-  });
-
-  await db.reservation.create({
-    data: {
-      userId: user.id,
-      propertyId: propertListing3.id,
-      startDate: new Date("2024-08-01"),
-      endDate: new Date("2024-08-15"),
-      totalPrice: 45000,
-      createdAt: new Date(),
     },
   });
 
