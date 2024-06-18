@@ -1,6 +1,5 @@
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import PropertyCard from "~/components/property-card";
+import { Link, useLoaderData } from "@remix-run/react";
 import { getAllCommunities } from "~/lib/community.server";
 
 export async function loader() {
@@ -24,12 +23,25 @@ export default function Properties() {
               </span>
               <div className="p-5 grid md:grid-cols-3 lg:grid-cols-4 w-full gap-5">
                 {community.properties.map((property) => (
-                  // @ts-ignore
-                  <PropertyCard
-                    property={property}
-                    key={property.id}
-                    showReserveButton={true}
-                  />
+                  <Link to={`/properties/${property.id}`} key={property.id}>
+                    <div className="col-span-1 cursor-pointer group w-full">
+                      <div className="flex flex-col gap-1">
+                        <div className="overflow-hidden rounded-xl h-[200px] w-full">
+                          <img
+                            className="w-full h-auto object-cover group-hover:scale-110 transition"
+                            src={property.imageSrc}
+                            alt="Property"
+                          />
+                        </div>
+                        <div className="font-semibold text-lg">
+                          {property.name}
+                        </div>
+                        <div className="">
+                          {property.location}, ${property.price}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </>

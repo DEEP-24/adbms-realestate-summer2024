@@ -193,42 +193,48 @@ export default function MyProperties() {
           </Button>
         </div>
       </div>
-      <div className="p-5 grid grid-cols-4 gap-8 w-full">
-        {properties.map((property) => (
-          // @ts-ignore
-          <div
-            className="col-span-1 cursor-pointer group w-full"
-            key={property.id}
-          >
-            <div className="flex flex-col gap-1">
-              <div className="overflow-hidden rounded-xl h-[200px] w-full">
-                <img
-                  className="w-full h-auto object-cover group-hover:scale-110 transition"
-                  src={property.imageSrc}
-                  alt="Property"
-                />
+      <div className="mt-3">
+        {properties.length > 0 ? (
+          <div className="p-5 grid grid-cols-4 gap-8 w-full">
+            {properties.map((property) => (
+              // @ts-ignore
+              <div
+                className="col-span-1 cursor-pointer group w-full"
+                key={property.id}
+              >
+                <div className="flex flex-col gap-1">
+                  <div className="overflow-hidden rounded-xl h-[200px] w-full">
+                    <img
+                      className="w-full h-auto object-cover group-hover:scale-110 transition"
+                      src={property.imageSrc}
+                      alt="Property"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    {property.name}
+                    <Button
+                      loading={isSubmitting}
+                      variant="subtle"
+                      onClick={() => {
+                        setSelectedPropertyId(property.id);
+                        setMode(MODE.edit);
+                      }}
+                      size="xs"
+                      className="text-white hover:bg-gray-600 hover:text-white border-2 rouned-md bg-gray-500"
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                  <div className="">
+                    {property.location}, ${property.price}
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center justify-between">
-                {property.name}
-                <Button
-                  loading={isSubmitting}
-                  variant="subtle"
-                  onClick={() => {
-                    setSelectedPropertyId(property.id);
-                    setMode(MODE.edit);
-                  }}
-                  size="xs"
-                  className="text-white hover:bg-gray-600 hover:text-white border-2 rouned-md bg-gray-500"
-                >
-                  Edit
-                </Button>
-              </div>
-              <div className="">
-                {property.location}, ${property.price}
-              </div>
-            </div>
+            ))}
           </div>
-        ))}
+        ) : (
+          <EmptyState />
+        )}
       </div>
 
       <Modal
@@ -371,6 +377,16 @@ export default function MyProperties() {
           </fieldset>
         </fetcher.Form>
       </Modal>
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+      <span className="mt-4 block text-sm font-medium text-gray-500">
+        There are no properties under you. Please add them.
+      </span>
     </div>
   );
 }

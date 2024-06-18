@@ -27,16 +27,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 const NavLinks: NavbarLink[] = [
   {
     id: 1,
-    href: "/",
-    label: "Home",
-  },
-  {
-    id: 2,
     href: "/properties",
     label: "Properties",
   },
   {
-    id: 3,
+    id: 2,
     href: "/reservations",
     label: "My Reservations",
   },
