@@ -14,8 +14,8 @@ export default function Properties() {
   const { properties } = useLoaderData<typeof loader>();
 
   return (
-    <div className="w-full h-full">
-      <div className="p-5 grid grid-cols-4 gap-8 w-full">
+    <div className="w-screen h-full">
+      <div className="p-5 grid md:grid-cols-3 lg:grid-cols-4 w-full gap-5">
         {properties.length > 0 ? (
           properties.map((property) => (
             // @ts-ignore
