@@ -75,7 +75,6 @@ async function main() {
       guestCount: 10,
       location: "Malibu",
       price: 5000,
-      propertyManagerId: propertyManager.id,
       communityId: community1.id,
     },
   });
@@ -93,7 +92,6 @@ async function main() {
       guestCount: 4,
       location: "New York",
       price: 1500,
-      propertyManagerId: propertyManager.id,
       communityId: community1.id,
     },
   });
@@ -111,7 +109,7 @@ async function main() {
       guestCount: 4,
       location: "Aspen",
       price: 2000,
-      propertyManagerId: propertyManager.id,
+      communityId: community1.id,
     },
   });
 

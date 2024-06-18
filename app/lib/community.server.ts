@@ -1,5 +1,9 @@
 import { db } from "~/lib/prisma.server";
 
 export async function getAllCommunities() {
-  return await db.community.findMany({});
+  return await db.community.findMany({
+    include: {
+      properties: true,
+    },
+  });
 }
