@@ -17,34 +17,36 @@ export default function MyReservations() {
 
   return (
     <div>
-      <table className="mt-4 w-full text-gray-500 sm:mt-6">
-        <thead className="sr-only text-left text-sm text-gray-500 sm:not-sr-only">
-          <tr>
-            <th scope="col" className="py-3 pr-8 font-normal sm:w-2/5 lg:w-1/3">
-              Property Name
-            </th>
-            <th
-              scope="col"
-              className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
-            >
-              Start Date
-            </th>
-            <th
-              scope="col"
-              className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
-            >
-              End Date
-            </th>
-            <th scope="col" className="py-3 pr-8 font-normal sm:table-cell">
-              Total Price
-            </th>
-
-            <th scope="col" className="w-0 py-3 text-right font-normal" />
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200 border-b border-gray-200 text-sm sm:border-t">
-          {reservations.length > 0 ? (
-            reservations.map((reservation) => {
+      {reservations.length > 0 ? (
+        <table className="mt-4 w-full text-gray-500 sm:mt-6">
+          <thead className="sr-only text-left text-sm text-gray-500 sm:not-sr-only">
+            <tr>
+              <th
+                scope="col"
+                className="py-3 pr-8 font-normal sm:w-2/5 lg:w-1/3"
+              >
+                Property Name
+              </th>
+              <th
+                scope="col"
+                className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
+              >
+                Start Date
+              </th>
+              <th
+                scope="col"
+                className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
+              >
+                End Date
+              </th>
+              <th scope="col" className="py-3 pr-8 font-normal sm:table-cell">
+                Total Price
+              </th>
+              <th scope="col" className="w-0 py-3 text-right font-normal" />
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 border-b border-gray-200 text-sm sm:border-t">
+            {reservations.map((reservation) => {
               return (
                 <tr key={reservation.id}>
                   <td className="py-6 pr-8">
@@ -59,26 +61,23 @@ export default function MyReservations() {
                       </div>
                     </div>
                   </td>
-
                   <td className="py-6 pr-8 sm:table-cell">
                     {formatDateTime(reservation.startDate)}
                   </td>
-
                   <td className="py-6 pr-8 sm:table-cell">
                     {formatDateTime(reservation.endDate)}
                   </td>
-
                   <td className="py-6 pr-8 sm:table-cell">
                     ${reservation.totalPrice}
                   </td>
                 </tr>
               );
-            })
-          ) : (
-            <EmptyState />
-          )}
-        </tbody>
-      </table>
+            })}
+          </tbody>
+        </table>
+      ) : (
+        <EmptyState />
+      )}
     </div>
   );
 }

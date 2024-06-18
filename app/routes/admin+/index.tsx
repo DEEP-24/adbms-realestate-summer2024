@@ -19,5 +19,5 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Index() {
-  return <div className="text-red-500">this is the admin page</div>;
+  return <div>this is the admin page</div>;
 }

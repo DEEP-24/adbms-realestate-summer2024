@@ -104,7 +104,11 @@ export default function SignUp() {
             <div className="flex items-center justify-between inset-0 gap-2 w-full">
               <Select
                 data={Object.values(UserRole)
-                  .filter((role) => role !== UserRole.ADMIN)
+                  .filter(
+                    (role) =>
+                      role !== UserRole.ADMIN &&
+                      role !== UserRole.PROPERTY_MANAGER,
+                  )
                   .map((role) => ({
                     value: role,
                     label: role,
