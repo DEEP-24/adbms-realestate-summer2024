@@ -98,6 +98,11 @@ const NavLinks: NavbarLink[] = [
     href: "/property-manager/reservations",
     label: "Reservations",
   },
+  {
+    id: 3,
+    href: "/property-manager/requests",
+    label: "Requests",
+  },
 ];
 
 export default function AppLayout() {

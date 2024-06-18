@@ -51,14 +51,3 @@ export default function Properties() {
     </div>
   );
 }
-
-// function EmptyState() {
-//   return (
-//     <div className="block h-full w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-//       <span className="mt-4 block text-sm font-medium text-gray-500">
-//         There are no properties available to reserve at the moment. All our
-//         properties are currently reserved.
-//       </span>
-//     </div>
-//   );
-// }
