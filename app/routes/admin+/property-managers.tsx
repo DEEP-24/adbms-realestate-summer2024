@@ -21,7 +21,7 @@ import { db } from "~/lib/prisma.server";
 import { getAllPropertyManagers } from "~/lib/propert-managers.server";
 import { cn } from "~/lib/utils";
 import { UserRole } from "~/roles";
-import { badRequest } from "~/utils/misc.server";
+import { badRequest, createPasswordHash } from "~/utils/misc.server";
 import type { inferErrors } from "~/utils/validation";
 import { validateAction } from "~/utils/validation";
 
@@ -120,7 +120,7 @@ export const action: ActionFunction = async ({ request }) => {
       firstName,
       lastName,
       email,
-      password,
+      password: await createPasswordHash(password),
       phoneNo,
       address,
       dob: new Date(dob),
@@ -137,7 +137,7 @@ export const action: ActionFunction = async ({ request }) => {
       firstName,
       lastName,
       email,
-      password,
+      password: await createPasswordHash(password),
       phoneNo,
       address,
       dob: new Date(dob),
