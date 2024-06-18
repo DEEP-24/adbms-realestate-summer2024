@@ -4,7 +4,9 @@ import { db } from "~/lib/prisma.server";
 export async function getPropertiesByUserId(userId: PropertyManager["id"]) {
   return await db.property.findMany({
     where: {
-      propertyManagerId: userId,
+      community: {
+        propertyManagerId: userId,
+      },
     },
   });
 }

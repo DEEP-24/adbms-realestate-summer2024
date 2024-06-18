@@ -90,16 +90,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 const NavLinks: NavbarLink[] = [
   {
     id: 1,
-    href: "/property-manager",
-    label: "Home",
-  },
-  {
-    id: 2,
     href: "/property-manager/my-properties",
     label: "My Properties",
   },
   {
-    id: 3,
+    id: 2,
     href: "/property-manager/reservations",
     label: "Reservations",
   },

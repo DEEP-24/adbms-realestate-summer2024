@@ -1,3 +1,5 @@
-export default function Index() {
-  return <div>This is the property manager dashboard</div>;
+import { redirect } from "@remix-run/node";
+
+export async function loader() {
+  return redirect("/property-manager/my-properties");
 }

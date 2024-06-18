@@ -1,7 +1,8 @@
 import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
+import "@mantine/dates/styles.css";
 import { ModalsProvider as MantineModalsProvider } from "@mantine/modals";
 import type {
-  LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
   SerializeFrom,
@@ -9,7 +10,6 @@ import type {
 import { json } from "@remix-run/node";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -21,8 +21,6 @@ import { getAdmin, getCustomer, getPropertyManager } from "~/lib/user.server";
 import { UserRole } from "~/roles";
 import { getUserId, getUserRole } from "./lib/session.server";
 import "./styles/tailwind.css";
-import "@mantine/core/styles.css";
-import "@mantine/dates/styles.css";
 
 export type RootLoaderData = SerializeFrom<typeof loader>;
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -82,7 +80,6 @@ export function Document({
           {children}
           <ScrollRestoration />
           <Scripts />
-          <LiveReload />
         </MantineProvider>
       </body>
     </html>

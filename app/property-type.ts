@@ -1,0 +1,10 @@
+export const PropertyType = {
+  APARTMENT: "APARTMENT",
+  HOUSE: "HOUSE",
+  VILLA: "VILLA",
+  OFFICE: "OFFICE",
+  SHOP: "SHOP",
+  WAREHOUSE: "WAREHOUSE",
+  LAND: "LAND",
+  OTHER: "OTHER",
+};

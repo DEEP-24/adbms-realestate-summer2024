@@ -1,14 +1,19 @@
 import type { Property } from "@prisma/client";
 import { Link } from "@remix-run/react";
+import type React from "react";
 
 interface PropertCardProps {
   property: Property;
   showReserveButton?: boolean;
+  showEditButton?: boolean;
+  editButton?: React.ReactNode;
 }
 
 export default function PropertyCard({
   property,
   showReserveButton,
+  showEditButton,
+  editButton,
 }: PropertCardProps) {
   return (
     <div className="col-span-1 cursor-pointer group w-full">
@@ -20,7 +25,10 @@ export default function PropertyCard({
             alt="Property"
           />
         </div>
-        <div className="font-semibold text-lg">{property.title}</div>
+        <div className="font-semibold text-lg">
+          {property.name}
+          {showEditButton && editButton}
+        </div>
         <div className="">
           {property.location}, ${property.price}
         </div>

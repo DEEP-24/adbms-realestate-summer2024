@@ -172,6 +172,9 @@ export async function getCustomerById(id: User["id"]) {
 export async function getPropertyManagerById(id: PropertyManager["id"]) {
   return db.propertyManager.findUnique({
     where: { id },
+    include: {
+      community: true,
+    },
   });
 }
 
