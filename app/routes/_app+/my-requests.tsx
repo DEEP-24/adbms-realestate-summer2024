@@ -1,21 +1,20 @@
-import { Badge, NativeSelect } from "@mantine/core";
+import { Badge } from "@mantine/core";
 import { RequestStatus } from "@prisma/client";
 import {
   json,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node";
-import { useLoaderData, useSubmit } from "@remix-run/react";
-import * as React from "react";
+import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
+import { getAllUserRequests } from "~/lib/customer.server";
 import { db } from "~/lib/prisma.server";
-import { getAllPropertyRequests } from "~/lib/propert-managers.server";
 import { requireUserId } from "~/lib/session.server";
 import { formatDateTime } from "~/utils/misc";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
-  const requests = await getAllPropertyRequests(userId);
+  const requests = await getAllUserRequests(userId);
 
   return json({
     requests,
@@ -53,10 +52,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function MyReservations() {
   const { requests } = useLoaderData<typeof loader>();
-  const submit = useSubmit();
-  const [isPending] = React.useTransition();
-
-  const isSubmitting = isPending;
 
   return (
     <div className="p-5">
@@ -74,7 +69,7 @@ export default function MyReservations() {
                 scope="col"
                 className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
               >
-                Customer
+                Property Owner
               </th>
               <th
                 scope="col"
@@ -86,27 +81,19 @@ export default function MyReservations() {
                 scope="col"
                 className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
               >
-                Status
+                End Date
               </th>
               <th
                 scope="col"
                 className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
               >
-                End Date
-              </th>
-              <th
-                scope="col"
-                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-              >
-                {""}
+                Status
               </th>
               <th scope="col" className="w-0 py-3 text-right font-normal" />
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 border-b border-gray-200 text-sm sm:border-t">
             {requests.map((request) => {
-              const statusOptions = ["PENDING", "APPROVED", "REJECTED"];
-
               return (
                 <tr key={request.id}>
                   <td className="py-6 pr-8">
@@ -124,9 +111,12 @@ export default function MyReservations() {
                   <td className="py-6 pr-8 sm:table-cell">
                     <div className="flex flex-col gap-1">
                       <span>
-                        {request.user.firstName} {request.user.lastName}
+                        {request.property.community?.propertyManager?.firstName}{" "}
+                        {request.property.community?.propertyManager?.lastName}
                       </span>
-                      <span>{request.user.email}</span>
+                      <span>
+                        {request.property.community?.propertyManager?.email}
+                      </span>
                     </div>
                   </td>
                   <td className="py-6 pr-8 sm:table-cell">
@@ -147,31 +137,6 @@ export default function MyReservations() {
                     >
                       {request.status}
                     </Badge>
-                  </td>
-                  <td className="py-6 pr-8 sm:table-cell">
-                    <NativeSelect
-                      className="w-48"
-                      defaultValue={request.status}
-                      data={statusOptions}
-                      disabled={
-                        isSubmitting ||
-                        request.status === RequestStatus.REJECTED ||
-                        request.status === RequestStatus.APPROVED
-                      }
-                      onChange={(e) => {
-                        submit(
-                          {
-                            intent: "update-request-status",
-                            requestId: request.id,
-                            status: e.target.value,
-                          },
-                          {
-                            method: "post",
-                            replace: true,
-                          },
-                        );
-                      }}
-                    />
                   </td>
                 </tr>
               );

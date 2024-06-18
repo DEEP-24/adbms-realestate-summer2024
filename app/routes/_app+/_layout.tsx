@@ -32,8 +32,13 @@ const NavLinks: NavbarLink[] = [
   },
   {
     id: 2,
-    href: "/reservations",
+    href: "/my-reservations",
     label: "My Reservations",
+  },
+  {
+    id: 3,
+    href: "/my-requests",
+    label: "My Requests",
   },
 ];
 
