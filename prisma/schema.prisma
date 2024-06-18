@@ -74,25 +74,26 @@ model PropertyManager {
 }
 
 model Property {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
   description   String
   imageSrc      String
-  category      String
-  roomCount     Int
-  bathroomCount Int
-  guestCount    Int
+  bathCount     Int
+  bedCount      Int
   location      String
-  price         Int
+  depositAmount Float
+  price         Float
+  type          String
+  amenities     String[]
 
   isAvailable Boolean @default(true)
 
   reservations Reservation[]
 
+  request Request[]
+
   community   Community? @relation(fields: [communityId], references: [id])
   communityId String?    @db.ObjectId
-
-  request Request[]
 
   createdAt DateTime @default(now())
 

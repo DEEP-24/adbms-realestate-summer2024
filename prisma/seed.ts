@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { PropertyType } from "~/property-type";
 import { createPasswordHash } from "~/utils/misc.server";
 
 const db = new PrismaClient();
@@ -64,51 +65,51 @@ async function main() {
   // Seed Property Listings
   await db.property.create({
     data: {
-      title: "Luxury Villa",
+      name: "Luxury Villa",
       description: "A beautiful luxury villa.",
       imageSrc:
         "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bHV4dXJ5JTIwdmlsbGF8ZW58MHx8MHx8fDA%3D",
-      createdAt: new Date(),
-      category: "Villa",
-      roomCount: 5,
-      bathroomCount: 3,
-      guestCount: 10,
+      bathCount: 3,
+      bedCount: 4,
       location: "Malibu",
+      depositAmount: 1000,
+      type: PropertyType.VILLA,
       price: 5000,
+      amenities: ["AC", "Dishwasher", "Refrigerator", "Washer", "Dryer"],
       communityId: community1.id,
     },
   });
 
   await db.property.create({
     data: {
-      title: "Cozy Apartment",
+      name: "Cozy Apartment",
       description: "A cozy apartment in the city center.",
       imageSrc:
         "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Q296eSUyMGFwYXJ0bWVudHxlbnwwfHwwfHx8MA%3D%3D",
-      createdAt: new Date(),
-      category: "Apartment",
-      roomCount: 2,
-      bathroomCount: 1,
-      guestCount: 4,
+      bathCount: 2,
+      bedCount: 2,
       location: "New York",
+      depositAmount: 500,
+      type: PropertyType.APARTMENT,
       price: 1500,
+      amenities: ["AC", "Dishwasher", "Refrigerator", "Washer", "Dryer"],
       communityId: community1.id,
     },
   });
 
   await db.property.create({
     data: {
-      title: "Mountain Cabin",
+      name: "Mountain Cabin",
       description: "A cozy cabin in the mountains.",
       imageSrc:
         "https://images.unsplash.com/photo-1609349093648-51d2ceb5a72a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bW91bnRhaW4lMjBjYWJpbnxlbnwwfHwwfHx8MA%3D%3D",
-      createdAt: new Date(),
-      category: "Cabin",
-      roomCount: 2,
-      bathroomCount: 1,
-      guestCount: 4,
+      bathCount: 1,
+      bedCount: 1,
       location: "Aspen",
+      depositAmount: 200,
+      type: PropertyType.HOUSE,
       price: 2000,
+      amenities: ["AC", "Dishwasher", "Refrigerator", "Washer", "Dryer"],
       communityId: community1.id,
     },
   });
