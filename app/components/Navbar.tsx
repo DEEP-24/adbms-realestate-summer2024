@@ -16,12 +16,12 @@ export default function Navbar({ userName, userEmail, navLinks }: NavbarProps) {
         <Container>
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
             <Logo />
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center gap-4">
               {navLinks?.map((navLink) => (
                 <NavLink
                   to={navLink.href}
                   key={navLink.id}
-                  className="rounded-lg px-3 py-2 transition-all hover:bg-gray-100 hover:rounded-lg"
+                  className="rounded-lg px-3 py-2 transition-all hover:bg-gray-100 hover:rounded-lg bg-gray-200"
                 >
                   {navLink.label}
                 </NavLink>
