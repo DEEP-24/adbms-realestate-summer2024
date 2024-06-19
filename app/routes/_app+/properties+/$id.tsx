@@ -10,7 +10,6 @@ import * as React from "react";
 import z from "zod";
 import { db } from "~/lib/prisma.server";
 import { getPropertyById } from "~/lib/properties.server";
-import { requireUserId } from "~/lib/session.server";
 import { useOptionCustomer } from "~/utils/hooks";
 import { badRequest } from "~/utils/misc.server";
 import { validateAction, type inferErrors } from "~/utils/validation";
@@ -24,13 +23,22 @@ const ManageRequestSchema = z.object({
 });
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const userId = await requireUserId(request);
+  // const userId = await requireUserId(request);
   const { id } = params;
 
   const propertyRequest = await db.reservationRequest.findFirst({
     where: {
-      userId,
       propertyId: id,
+    },
+    select: {
+      reservation: true,
+      status: true,
+      property: true,
+      propertyId: true,
+      startDate: true,
+      endDate: true,
+      ssn: true,
+      user: true,
     },
   });
 
@@ -100,6 +108,9 @@ export default function Property() {
       handleModal.close();
     }
   }, [fetcher.data?.success, fetcher.state, fetcher.data, handleModal]);
+
+  const propertyAlreadyReserved =
+    propertyRequest?.reservation?.propertyId === property.id;
 
   return (
     <>
@@ -195,7 +206,8 @@ export default function Property() {
                   disabled={
                     !property.isAvailable ||
                     propertyRequest?.status === RequestStatus.PENDING ||
-                    propertyRequest?.status === RequestStatus.APPROVED
+                    propertyRequest?.status === RequestStatus.APPROVED ||
+                    propertyAlreadyReserved
                   }
                   className="hover:bg-gray-600 w-full"
                 >
@@ -203,6 +215,9 @@ export default function Property() {
                     ? "Request Pending"
                     : "Request to Reserve"}
                 </Button>
+                {propertyAlreadyReserved && (
+                  <span>This property is reserved by other user.</span>
+                )}
               </div>
             </div>
           </div>

@@ -1,9 +1,9 @@
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { getCommunitiesWithUnReservedProperties } from "~/lib/community.server";
+import { getCommunitiesWithProperties } from "~/lib/properties.server";
 
 export async function loader() {
-  const communities = await getCommunitiesWithUnReservedProperties();
+  const communities = await getCommunitiesWithProperties();
   return json({
     communities,
   });
