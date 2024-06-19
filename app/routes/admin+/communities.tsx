@@ -241,7 +241,7 @@ export default function ManageProducts() {
                 Cancel
               </Button>
               <Button type="submit" loading={isSubmitting}>
-                {mode === MODE.edit ? "Save changes" : "Add product"}
+                {mode === MODE.edit ? "Save changes" : "Add Community"}
               </Button>
             </div>
           </fieldset>

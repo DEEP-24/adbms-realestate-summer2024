@@ -371,7 +371,7 @@ export default function MyProperties() {
                 Cancel
               </Button>
               <Button type="submit" loading={isSubmitting}>
-                {mode === MODE.edit ? "Save changes" : "Add product"}
+                {mode === MODE.edit ? "Save changes" : "Add Property"}
               </Button>
             </div>
           </fieldset>
