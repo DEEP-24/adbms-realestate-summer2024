@@ -27,7 +27,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
   const { id } = params;
 
-  const propertyReservedByOtherUser = await db.reservationRequest.findFirst({
+  const propertyReservedByOtherUser = await db.reservationRequest.findMany({
     where: {
       propertyId: id,
     },
@@ -128,14 +128,14 @@ export default function Property() {
     }
   }, [fetcher.data?.success, fetcher.state, fetcher.data, handleModal]);
 
-  const propertyAlreadyReserved =
-    propertyReservedByOtherUser?.propertyId === property.id;
+  const propertyAlreadyReservedBy1stUser =
+    propertyReservedByOtherUser[0]?.propertyId === property.id;
 
-  console.log("Property Already Reserved", propertyAlreadyReserved);
-  console.log(
-    "Property Already Reserved startDate",
-    propertyReservedByOtherUser?.startDate,
-  );
+  const propertyAlreadyReservedBy2ndUser =
+    propertyReservedByOtherUser[1]?.propertyId === property.id;
+
+  console.log(propertyReservedByOtherUser[0]);
+  console.log(propertyReservedByOtherUser[1]);
 
   return (
     <>
@@ -228,16 +228,28 @@ export default function Property() {
                   onClick={() => {
                     handleModal.open();
                   }}
-                  disabled={!property.isAvailable}
+                  disabled={
+                    !property.isAvailable ||
+                    propertyRequestByYou?.status === RequestStatus.APPROVED ||
+                    propertyRequestByYou?.status === RequestStatus.PENDING ||
+                    propertyRequestByYou?.status === RequestStatus.REJECTED
+                  }
                   className="hover:bg-gray-600 w-full"
                 >
                   {propertyRequestByYou?.status === RequestStatus.PENDING
                     ? "Request Pending"
-                    : "Request to Reserve"}
+                    : propertyRequestByYou?.status === RequestStatus.APPROVED
+                      ? "Request Approved"
+                      : propertyRequestByYou?.status === RequestStatus.REJECTED
+                        ? "Request Rejected"
+                        : "Request to Reserve"}
                 </Button>
-                {propertyAlreadyReserved && (
-                  <span>This property is reserved by other user.</span>
-                )}
+                <div>
+                  {propertyAlreadyReservedBy1stUser ||
+                  propertyAlreadyReservedBy2ndUser ? (
+                    <span>This property is reserved by other user.</span>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>
@@ -273,9 +285,11 @@ export default function Property() {
               label="Start Date"
               required={true}
               minDate={
-                propertyAlreadyReserved
-                  ? new Date(propertyReservedByOtherUser?.endDate)
-                  : new Date()
+                propertyReservedByOtherUser.length === 1
+                  ? new Date(propertyReservedByOtherUser[0]?.endDate)
+                  : propertyReservedByOtherUser.length === 2
+                    ? new Date(propertyReservedByOtherUser[1]?.endDate)
+                    : new Date()
               }
               error={fetcher.data?.fieldErrors?.startDate}
               onChange={(date) => setStartDate(date)}
