@@ -1,16 +1,28 @@
-import { Badge } from "@mantine/core";
+import { Badge, Button } from "@mantine/core";
 import { RequestStatus } from "@prisma/client";
 import {
   json,
   type ActionFunctionArgs,
   type LoaderFunctionArgs,
 } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import invariant from "tiny-invariant";
-import { getAllUserRequests } from "~/lib/customer.server";
+import { useFetcher, useLoaderData } from "@remix-run/react";
+import z from "zod";
 import { db } from "~/lib/prisma.server";
+import { getAllUserRequests } from "~/lib/reservation.server";
 import { requireUserId } from "~/lib/session.server";
+import { useOptionCustomer } from "~/utils/hooks";
 import { formatDateTime } from "~/utils/misc";
+import { badRequest } from "~/utils/misc.server";
+import { validateAction, type inferErrors } from "~/utils/validation";
+
+const ReservationSchema = z.object({
+  userId: z.string().min(1, "User ID is required"),
+  startDate: z.string().min(1, "Start Date is required"),
+  endDate: z.string().min(1, "End Date is required"),
+  propertyId: z.string().min(1, "Property ID is required"),
+  totalPrice: z.string().min(1, "Price is required"),
+  requestId: z.string().min(1, "Request ID is required"),
+});
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -22,36 +34,46 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
+  const { fields, fieldErrors } = await validateAction(
+    request,
+    ReservationSchema,
+  );
 
-  const intent = formData.get("intent")?.toString();
-  invariant(intent, "Invalid intent");
-
-  const requestId = formData.get("requestId")?.toString();
-  invariant(requestId, "Invalid request id");
-  switch (intent) {
-    case "update-request-status": {
-      const status = formData.get("status")?.toString();
-      invariant(status, "Invalid status");
-
-      await db.request.update({
-        where: { id: requestId },
-        data: { status: status as RequestStatus },
-      });
-
-      return json({ success: true });
-    }
-
-    default:
-      return json(
-        { success: false, message: "Invalid intent" },
-        { status: 400 },
-      );
+  if (fieldErrors) {
+    return badRequest<ActionData>({ success: false, fieldErrors });
   }
+
+  const { userId, propertyId, startDate, endDate, totalPrice, requestId } =
+    fields;
+
+  await db.reservation.create({
+    data: {
+      userId: userId,
+      propertyId: propertyId,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      totalPrice: Number(totalPrice),
+      reservationRequest: {
+        connect: {
+          id: requestId,
+        },
+      },
+    },
+  });
+
+  return json({ success: true });
 };
 
+interface ActionData {
+  success: boolean;
+  fieldErrors?: inferErrors<typeof ReservationSchema>;
+}
+
 export default function MyReservations() {
+  const user = useOptionCustomer();
   const { requests } = useLoaderData<typeof loader>();
+  const fetcher = useFetcher<ActionData>();
+  const isSubmitting = fetcher.state !== "idle";
 
   return (
     <div className="p-5">
@@ -89,11 +111,19 @@ export default function MyReservations() {
               >
                 Status
               </th>
+              <th
+                scope="col"
+                className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
+              >
+                {""}
+              </th>
               <th scope="col" className="w-0 py-3 text-right font-normal" />
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 border-b border-gray-200 text-sm sm:border-t">
             {requests.map((request) => {
+              const alreadyLeased = request.reservation !== null;
+
               return (
                 <tr key={request.id}>
                   <td className="py-6 pr-8">
@@ -137,6 +167,55 @@ export default function MyReservations() {
                     >
                       {request.status}
                     </Badge>
+                  </td>
+                  <td className="py-6 pr-8 sm:table-cell">
+                    <fetcher.Form method="post">
+                      <input
+                        type="hidden"
+                        name="requestId"
+                        value={request.id}
+                      />
+                      <input
+                        type="hidden"
+                        name="startDate"
+                        value={request.startDate}
+                      />
+                      <input
+                        type="hidden"
+                        name="endDate"
+                        value={request.endDate}
+                      />
+                      <input
+                        type="hidden"
+                        name="propertyId"
+                        value={request.property.id}
+                      />
+                      <input type="hidden" name="userId" value={user?.id} />
+                      <input
+                        type="hidden"
+                        name="totalPrice"
+                        value={request.property.price}
+                      />
+                      <input
+                        type="hidden"
+                        name="requestId"
+                        value={request.id}
+                      />
+
+                      <Button
+                        color="black"
+                        className="hover:bg-gray-700 rounded-lg"
+                        disabled={
+                          request.status === RequestStatus.PENDING ||
+                          request.status === RequestStatus.REJECTED ||
+                          isSubmitting ||
+                          alreadyLeased
+                        }
+                        type="submit"
+                      >
+                        Lease
+                      </Button>
+                    </fetcher.Form>
                   </td>
                 </tr>
               );

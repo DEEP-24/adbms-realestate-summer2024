@@ -1,5 +1,5 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
-import { Button, Modal } from "@mantine/core";
+import { Button, Modal, TextInput } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { RequestStatus } from "@prisma/client";
@@ -20,13 +20,14 @@ const ManageRequestSchema = z.object({
   startDate: z.string().min(1, "Start Date is required"),
   endDate: z.string().min(1, "End Date is required"),
   propertyId: z.string().min(1, "Property ID is required"),
+  ssn: z.string().min(1, "SSN is required"),
 });
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
   const { id } = params;
 
-  const propertyRequest = await db.request.findFirst({
+  const propertyRequest = await db.reservationRequest.findFirst({
     where: {
       userId,
       propertyId: id,
@@ -61,15 +62,16 @@ export const action: ActionFunction = async ({ request }) => {
     return badRequest<ActionData>({ success: false, fieldErrors });
   }
 
-  const { userId, propertyId, startDate, endDate } = fields;
+  const { userId, propertyId, startDate, endDate, ssn } = fields;
 
-  await db.request.create({
+  await db.reservationRequest.create({
     data: {
       userId,
       propertyId,
       startDate: new Date(startDate),
       endDate: new Date(endDate),
       status: RequestStatus.PENDING,
+      ssn: ssn,
     },
   });
 
@@ -249,6 +251,14 @@ export default function Property() {
               error={fetcher.data?.fieldErrors?.endDate}
               className="w-full"
               clearable={true}
+            />
+
+            <TextInput
+              name="ssn"
+              label="SSN"
+              required={true}
+              error={fetcher.data?.fieldErrors?.ssn}
+              className="w-full"
             />
 
             <div className="mt-1 flex items-center justify-end gap-4">

@@ -18,7 +18,7 @@ export async function getAllPropertyRequests(
   propertyManagerId: PropertyManager["id"],
 ) {
   //get all requests made for the property of this properymanager
-  return await db.request.findMany({
+  return await db.reservationRequest.findMany({
     where: {
       property: {
         community: {

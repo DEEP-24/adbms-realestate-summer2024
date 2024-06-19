@@ -7,3 +7,17 @@ export async function getAllCommunities() {
     },
   });
 }
+
+export async function getCommunitiesWithUnReservedProperties() {
+  return await db.community.findMany({
+    include: {
+      properties: {
+        where: {
+          reservations: {
+            none: {},
+          },
+        },
+      },
+    },
+  });
+}

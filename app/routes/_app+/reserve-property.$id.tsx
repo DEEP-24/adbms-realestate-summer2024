@@ -66,9 +66,7 @@ export default function ReserveProperty() {
 
   return (
     <div className="w-full h-full">
-      <span className="text-xl font-semibold text-center">
-        {property.title}
-      </span>
+      <span className="text-xl font-semibold text-center">{property.name}</span>
       <fetcher.Form method="post" className="flex flex-col gap-4 p-5">
         <div className="flex flex-col gap-2">
           <label htmlFor="startDate" className="text-lg font-semibold">

@@ -16,7 +16,7 @@ export default function MyReservations() {
   const { reservations } = useLoaderData<typeof loader>();
 
   return (
-    <div>
+    <div className="p-5">
       {reservations.length > 0 ? (
         <table className="mt-4 w-full text-gray-500 sm:mt-6">
           <thead className="sr-only text-left text-sm text-gray-500 sm:not-sr-only">
@@ -52,12 +52,12 @@ export default function MyReservations() {
                   <td className="py-6 pr-8">
                     <div className="flex items-center">
                       <img
-                        src={reservation.property.imageSrc}
-                        alt={reservation.property.title}
+                        src={reservation.property?.imageSrc}
+                        alt={reservation.property?.name}
                         className="mr-6 h-16 w-16 rounded object-cover object-center"
                       />
                       <div className="flex flex-col font-medium text-gray-900">
-                        {reservation.property.title}
+                        {reservation.property?.name}
                       </div>
                     </div>
                   </td>

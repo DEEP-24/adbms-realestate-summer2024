@@ -31,26 +31,21 @@ export type NavbarLink = {
 const NavLinks: NavbarLink[] = [
   {
     id: 1,
-    href: "/admin",
-    label: "Home",
-  },
-  {
-    id: 2,
     href: "/admin/properties",
     label: "Properties",
   },
   {
-    id: 3,
+    id: 2,
     href: "/admin/reservations",
     label: "Reservations",
   },
   {
-    id: 4,
+    id: 3,
     href: "/admin/communities",
     label: "Communities",
   },
   {
-    id: 5,
+    id: 4,
     href: "/admin/property-managers",
     label: "Property Managers",
   },

@@ -28,3 +28,15 @@ export async function getPropertyById(id: string) {
     },
   });
 }
+
+export async function getAllProperties() {
+  return await db.property.findMany();
+}
+
+export async function getCommunitiesWithProperties() {
+  return await db.community.findMany({
+    include: {
+      properties: true,
+    },
+  });
+}

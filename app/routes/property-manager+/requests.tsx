@@ -35,7 +35,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const status = formData.get("status")?.toString();
       invariant(status, "Invalid status");
 
-      await db.request.update({
+      await db.reservationRequest.update({
         where: { id: requestId },
         data: { status: status as RequestStatus },
       });
@@ -86,13 +86,13 @@ export default function MyReservations() {
                 scope="col"
                 className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
               >
-                Status
+                End Date
               </th>
               <th
                 scope="col"
                 className="w-1/5 py-3 pr-8 font-normal sm:table-cell"
               >
-                End Date
+                Status
               </th>
               <th
                 scope="col"
