@@ -5,8 +5,8 @@ import { createPasswordHash } from "~/utils/misc.server";
 const db = new PrismaClient();
 
 async function main() {
-  await db.reservationRequest.deleteMany();
   await db.reservation.deleteMany();
+  await db.reservationRequest.deleteMany();
   await db.community.deleteMany();
   await db.admin.deleteMany();
   await db.user.deleteMany();

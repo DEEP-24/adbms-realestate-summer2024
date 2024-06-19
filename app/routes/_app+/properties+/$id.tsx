@@ -201,7 +201,7 @@ export default function Property() {
                 >
                   {propertyRequest?.status === RequestStatus.PENDING
                     ? "Request Pending"
-                    : "Reserve"}
+                    : "Request to Reserve"}
                 </Button>
               </div>
             </div>
