@@ -127,6 +127,7 @@ export default function MyReservations() {
                         {request.user.firstName} {request.user.lastName}
                       </span>
                       <span>{request.user.email}</span>
+                      <span>{request.ssn}</span>
                     </div>
                   </td>
                   <td className="py-6 pr-8 sm:table-cell">

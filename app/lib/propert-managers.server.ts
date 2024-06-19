@@ -32,6 +32,7 @@ export async function getAllPropertyRequests(
       user: true,
       startDate: true,
       endDate: true,
+      ssn: true,
       status: true,
     },
   });
