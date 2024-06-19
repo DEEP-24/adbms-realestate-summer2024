@@ -10,6 +10,7 @@ import * as React from "react";
 import z from "zod";
 import { db } from "~/lib/prisma.server";
 import { getPropertyById } from "~/lib/properties.server";
+import { requireUserId } from "~/lib/session.server";
 import { useOptionCustomer } from "~/utils/hooks";
 import { badRequest } from "~/utils/misc.server";
 import { validateAction, type inferErrors } from "~/utils/validation";
@@ -23,12 +24,29 @@ const ManageRequestSchema = z.object({
 });
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  // const userId = await requireUserId(request);
+  const userId = await requireUserId(request);
   const { id } = params;
 
-  const propertyRequest = await db.reservationRequest.findFirst({
+  const propertyReservedByOtherUser = await db.reservationRequest.findFirst({
     where: {
       propertyId: id,
+    },
+    select: {
+      reservation: true,
+      status: true,
+      property: true,
+      propertyId: true,
+      startDate: true,
+      endDate: true,
+      ssn: true,
+      user: true,
+    },
+  });
+
+  const propertyRequestByYou = await db.reservationRequest.findFirst({
+    where: {
+      propertyId: id,
+      userId: userId,
     },
     select: {
       reservation: true,
@@ -52,7 +70,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     return redirect("/properties");
   }
 
-  return json({ property, propertyRequest });
+  return json({ property, propertyReservedByOtherUser, propertyRequestByYou });
 };
 
 interface ActionData {
@@ -91,7 +109,8 @@ export const action: ActionFunction = async ({ request }) => {
 export default function Property() {
   const user = useOptionCustomer();
   const fetcher = useFetcher<ActionData>();
-  const { property, propertyRequest } = useLoaderData<typeof loader>();
+  const { property, propertyReservedByOtherUser, propertyRequestByYou } =
+    useLoaderData<typeof loader>();
 
   const [isModalOpen, handleModal] = useDisclosure(false);
 
@@ -110,7 +129,13 @@ export default function Property() {
   }, [fetcher.data?.success, fetcher.state, fetcher.data, handleModal]);
 
   const propertyAlreadyReserved =
-    propertyRequest?.reservation?.propertyId === property.id;
+    propertyReservedByOtherUser?.propertyId === property.id;
+
+  console.log("Property Already Reserved", propertyAlreadyReserved);
+  console.log(
+    "Property Already Reserved startDate",
+    propertyReservedByOtherUser?.startDate,
+  );
 
   return (
     <>
@@ -203,15 +228,10 @@ export default function Property() {
                   onClick={() => {
                     handleModal.open();
                   }}
-                  disabled={
-                    !property.isAvailable ||
-                    propertyRequest?.status === RequestStatus.PENDING ||
-                    propertyRequest?.status === RequestStatus.APPROVED ||
-                    propertyAlreadyReserved
-                  }
+                  disabled={!property.isAvailable}
                   className="hover:bg-gray-600 w-full"
                 >
-                  {propertyRequest?.status === RequestStatus.PENDING
+                  {propertyRequestByYou?.status === RequestStatus.PENDING
                     ? "Request Pending"
                     : "Request to Reserve"}
                 </Button>
@@ -252,7 +272,11 @@ export default function Property() {
               name="startDate"
               label="Start Date"
               required={true}
-              minDate={new Date()}
+              minDate={
+                propertyAlreadyReserved
+                  ? new Date(propertyReservedByOtherUser?.endDate)
+                  : new Date()
+              }
               error={fetcher.data?.fieldErrors?.startDate}
               onChange={(date) => setStartDate(date)}
               className="w-full"
