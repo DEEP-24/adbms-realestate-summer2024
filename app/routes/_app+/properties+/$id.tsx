@@ -193,8 +193,9 @@ export default function Property() {
                     handleModal.open();
                   }}
                   disabled={
-                    !property.isAvailable &&
-                    propertyRequest?.status === RequestStatus.PENDING
+                    !property.isAvailable ||
+                    propertyRequest?.status === RequestStatus.PENDING ||
+                    propertyRequest?.status === RequestStatus.APPROVED
                   }
                   className="hover:bg-gray-600 w-full"
                 >
